@@ -1,4 +1,4 @@
-# Team "Phoenix Foundation"
+# Team "The Phoenix Foundation"
 
 Let's collect everything we need here.
 
