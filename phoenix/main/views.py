@@ -15,13 +15,6 @@ from flask import Blueprint, render_template_string, jsonify
 
 blueprint = Blueprint('main', __name__, static_folder='../static')
 
-# currently available models
-MODELS = [
-    'models/0/ACRIMSAT_05.dae',
-    'models/1/NEAR_07.dae',
-    'models/2/Dawn_19.dae',
-]
-
 
 @blueprint.route('/')
 def index():
@@ -33,20 +26,24 @@ def satellites():
     satellites = []
     with open(SATELLITES, 'r') as f:
         data = f.read().splitlines(False)
-    for j, i in enumerate(range(0, len(data), 3)):
+    for i in range(0, len(data), 3):
         satellites.append({
             'name': data[i].strip(),
             'catalog_number': data[i+1][2:7],
             'id': data[i+1][9:17].strip(),
             'line1': data[i+1],
             'line2': data[i+2],
-            'category': MODELS[j % len(MODELS)],  # FIXME: this should map to the correct model :)
+            'category': 0
         })
     return jsonify(satellites)
 
 
 @blueprint.route('/satellite_position.json')
 def satellite_position():
+
+
+
+
     # Hardcoded for one satellite
     satellite_name = "ODIN"
     satellite_line1 = '1 26702U 01007A   19291.79098765 -.00000023  00000-0  25505-5 0  9996'
