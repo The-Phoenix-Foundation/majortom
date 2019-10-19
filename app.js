@@ -11,7 +11,9 @@ function renderSatellite(satellite) {
     var currentSatelitePosition = currentSatellitePos[satellite.id];
     var position = new WorldWind.Position(currentSatelitePosition.latitude, currentSatelitePosition.longitude, currentSatelitePosition.altitude);
     var colladaLoader = new WorldWind.ColladaLoader(position);
-    var scene = colladaLoader.parse(satelliteModelMap['satellite']);
+    var category = satellite.category;
+    colladaLoader.init({dirPath: './models/'+category+'/'});
+    var scene = colladaLoader.parse(satelliteModelMap[category]);
     scene.displayName = satellite.id;
     scene.scale = 10000;
     scene.position = position;
@@ -60,10 +62,10 @@ function renderSatellitePath(positions, color,id) {
 }
 
 function loadSatelliteModels() {
-    var satelliteModels = ['satellite'];
+    var satelliteModels = ['0', '1', '2'];
     for (var i=0;i < satelliteModels.length; i++) {
-        var model = satelliteModels[i]; 
-        fetch(model+'.dae')
+        let model = satelliteModels[i]; 
+        fetch('/models/'+ model+'/'+model+'.dae')
           .then(function(response) {
             return response.text()
           }).then(function(body) {
