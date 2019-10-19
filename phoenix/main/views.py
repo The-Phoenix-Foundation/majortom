@@ -30,7 +30,7 @@ def satellites():
         satellites.append({
             'name': data[i].strip(),
             'catalog_number': data[i+1][2:7],
-            'id': data[i+1][9:17],
+            'id': data[i+1][9:17].strip(),
             'line1': data[i+1],
             'line2': data[i+2],
             'category': 0
