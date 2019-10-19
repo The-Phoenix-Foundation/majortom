@@ -1,0 +1,10 @@
+name: majortom
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - r-tidyverse
+  - r-shiny
+  - r-lubridate
+  - r-devtools
