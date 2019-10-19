@@ -1,0 +1,6 @@
+# total major tom deployment setup
+version: "3.7"
+services:
+  majortom_api:
+    build: ./
+
