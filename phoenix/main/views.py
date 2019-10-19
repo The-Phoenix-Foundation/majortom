@@ -7,6 +7,7 @@ from astropy.time import Time
 from sgp4.earth_gravity import wgs72
 from sgp4.io import twoline2rv
 
+
 import json
 
 from flask import Blueprint, render_template_string, jsonify
@@ -19,8 +20,21 @@ def index():
     return render_template_string("<html><body>START</body></html>")
 
 
+@blueprint.route('/satellites')
+def satellites():
+    return jsonify([{
+        'name': 'ODIN',
+        'line1': '1 26702U 01007A   19291.79098765 -.00000023  00000-0  25505-5 0  9996',
+        'line2': '2 26702  97.5699 307.6930 0011485  26.4207 333.7604 15.07886437 19647',
+        'category': 0
+    }])
+
+
 @blueprint.route('/satellite_position.json')
 def satellite_position():
+
+
+
 
     # Hardcoded for one satellite
     satellite_name = "ODIN"
