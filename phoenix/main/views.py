@@ -26,14 +26,14 @@ def satellites():
     satellites = []
     with open(SATELLITES, 'r') as f:
         data = f.read().splitlines(False)
-    for i in range(0, len(data), 3):
+    for j, i in enumerate(range(0, len(data), 3)):
         satellites.append({
             'name': data[i].strip(),
             'catalog_number': data[i+1][2:7],
             'id': data[i+1][9:17].strip(),
             'line1': data[i+1],
             'line2': data[i+2],
-            'category': 0
+            'category': j % 3,  # FIXME: we have 3 models so far :) this should be replaced with magic
         })
     return jsonify(satellites)
 
