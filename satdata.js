@@ -34,7 +34,6 @@ function loadSatellites() {
 }
 
 
-loadSatellites();
 
 
 function tle2orbit(tleLine1, tleLine2) {
