@@ -8,9 +8,12 @@ ADD shiny/dependencies.R /dependencies.R
 ADD shiny/majortom.yml /
 RUN conda env create -f /majortom.yml && conda clean -a
 
+RUN conda init
+ENV PATH /opt/conda/envs/majortom/bin:$PATH
+
 RUN conda activate majortom && Rscript /dependencies.R
 
 ADD shiny /shiny
 
 WORKDIR /shiny/majortom
-CMD conda activate majortom && Rscript app.R
+CMD Rscript app.R
