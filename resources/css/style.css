@@ -1,0 +1,69 @@
+body,
+html {
+  font-size: 18px;
+}
+
+a {
+  color: black;
+}
+
+/* div,
+section {
+  border: 1px solid black;
+} */
+
+h1 {
+  padding: 30px;
+}
+
+section {
+    padding: 0 3em 3em 3em;
+}
+
+/* Navbar */
+
+.navbar {
+  margin-bottom: 0;
+}
+
+/* Jumbotron */
+
+.jumbotron {
+  margin: 0;
+}
+
+.jumbotron p {
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+.btn {
+  background-color: orange;
+  font-style: normal;
+  font-weight: bolder;
+  letter-spacing: 2px;
+}
+
+/* Portfolio Section */
+
+#portfolio {
+  background-color: #eee;
+}
+
+.row img {
+  margin: 20px 0;
+}
+
+/*Contact Section*/
+
+.contact {
+  padding: 1em;
+}
+
+/* Footer */
+
+footer {
+  background: black;
+  color: lightgray;
+  padding: .6em;
+}

@@ -3,6 +3,7 @@ function jsonCopy(src) {
 }
 var satelliteObjects = {}
 var filteredSatellites =[];
+var visibleSatellites = new Set([]);
 var userLocation = {latitude: 0, longitude:0};
 var satelliteOrbitsDrawn = false;
 
@@ -11,6 +12,7 @@ function renderSatellite(satellite) {
     var position = new WorldWind.Position(currentSatelitePosition.latitude, currentSatelitePosition.longitude, currentSatelitePosition.altitude);
     var colladaLoader = new WorldWind.ColladaLoader(position);
     var scene = colladaLoader.parse(satelliteModelMap['satellite']);
+    scene.displayName = satellite.id;
     scene.scale = 10000;
     scene.position = position;
     scene.altitudeMode = WorldWind.ABSOLUTE;
@@ -38,11 +40,11 @@ function renderSatelliteOrbits() {
            var point = orbit[i];
            positions.push(new WorldWind.Position(point.latitude, point.longitude, point.altitude))
         }
-        renderSatellitePath(positions,colors[colorIdx]);
+        renderSatellitePath(positions,colors[colorIdx], satellite.id);
    }
 }
 
-function renderSatellitePath(positions, color) {  
+function renderSatellitePath(positions, color,id) {  
     var pathAttributes = new WorldWind.ShapeAttributes(null);
     pathAttributes.outlineColor = color;
     pathAttributes.interiorColor = new WorldWind.Color(0, 1, 1, 0.5);
@@ -53,6 +55,7 @@ function renderSatellitePath(positions, color) {
     path.followTerrain = false;
     path.extrude = pathAttributes.drawVerticals; // Make it a curtain.
     path.useSurfaceShapeFor2D = true; // Use a surface shape in 2D mode.
+    path.displayName = id;
     pathsLayer.addRenderable(path);   
 }
 
@@ -70,6 +73,32 @@ function loadSatelliteModels() {
             console.log('parsing failed', ex)
         });
     }
+}
+
+function removeRenderable(layer) {
+    for (var i=0;i<layer.renderables.length;i++) {
+        var renderable = layer.renderables
+        if (! visibleSatellites.has(renderables.displayName)) {
+            layer.removeRenderable(renderable);
+        }
+    }
+}
+
+function filterSatellites() {
+    visibleSatellites.clear();
+    filteredSatellites = satellites.filter(function(s){
+        visibleSatellites.add(currentSatellitePos.id);
+        var currentSatelitePosition = currentSatellitePos[s.id];
+        return satellite_in_distance(currentSatelitePosition, userLocation, 500 )
+    })
+    removeRenderable(satellitesLayer);
+    removeRenderable(pathsLayer);
+}
+
+function update() {
+    filterSatellites();
+    renderSatellites();
+    renderSatelliteOrbits();
 }
 
 function showLocation() {
@@ -148,11 +177,12 @@ var startTimeMillis = Date.now();
 
 
 function getCurrentPosition(satellite) {
-    return new WorldWind.Position(satellite.latitude, satellite.longitude, satellite.height); 
+    var sampleTime = new Date();
+    var pos = tle2currentGeodetic(satellite.line1, satellite.line2, sampleTime);
+    return new WorldWind.Position(pos.latitude, pos.longitude, pos.altitude); 
 }
 
 function updateSatellitePositions() {
-    console.log("update position");
     for (var id in satelliteObjects) {
         var scene = satelliteObjects[id]['scene'];
         var satellite = satelliteObjects[id]['data'];
@@ -176,7 +206,8 @@ function runAnimation() {
     // Update the date in both the Starfield and the Atmosphere layers.
     //starFieldLayer.time = simulatedDate;
     //atmosphereLayer.time = simulatedDate;
-    //if (++last % 120 == 0) updateSatellitePositions();
+    updateSatellitePositions();
+    if (++last % 180000 == 0) update();
     wwd.redraw(); // Update the WorldWindow scene.
 
     requestAnimationFrame(runAnimation);
@@ -187,13 +218,7 @@ requestAnimationFrame(runAnimation);
 showLocation()
 
 loadSatellites().then(function(){
-    filteredSatellites = satellites.filter(function(s){
-        var currentSatelitePosition = currentSatellitePos[s.id];
-        return satellite_in_distance(currentSatelitePosition, userLocation, 500 )
-    })
-   
-    renderSatelliteOrbits();
-    renderSatellites();
+    update();
 });
 
 
