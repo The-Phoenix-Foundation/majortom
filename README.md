@@ -1,5 +1,11 @@
 # Team "The Phoenix Foundation"
 
+
+GITTER: https://gitter.im/spaceapp-phoenix-foundation/community
+
+
+
+
 Let's collect everything we need here.
 
 # TODO
