@@ -1,16 +1,16 @@
 
 
-FROM r-base:3.6.1
+FROM continuumio/miniconda:4.7.12
 
-RUN mkdir /mylibs
-ENV R_LIBS /mylibs
-
+# RUN mkdir /mylibs
+# ENV R_LIBS /mylibs
 ADD shiny/dependencies.R /dependencies.R
+ADD shiny/majortom.yml /
+RUN conda env create -f /majortom.yml && conda clean -a
 
-USER root
-RUN Rscript /dependencies.R
+RUN conda activate majortom && Rscript /dependencies.R
 
 ADD shiny /shiny
 
 WORKDIR /shiny/majortom
-CMD Rscript app.R
+CMD conda activate majortom && Rscript app.R
