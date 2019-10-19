@@ -1,4 +1,4 @@
-
+import os
 import datetime
 from astropy import coordinates as coord
 from astropy import units as u
@@ -7,6 +7,7 @@ from astropy.time import Time
 from sgp4.earth_gravity import wgs72
 from sgp4.io import twoline2rv
 
+SATELLITES = os.path.join(os.path.dirname(__file__), '../data/active.txt')
 
 import json
 
@@ -22,12 +23,19 @@ def index():
 
 @blueprint.route('/satellites')
 def satellites():
-    return jsonify([{
-        'name': 'ODIN',
-        'line1': '1 26702U 01007A   19291.79098765 -.00000023  00000-0  25505-5 0  9996',
-        'line2': '2 26702  97.5699 307.6930 0011485  26.4207 333.7604 15.07886437 19647',
-        'category': 0
-    }])
+    satellites = []
+    with open(SATELLITES, 'r') as f:
+        data = f.read().splitlines(False)
+    for i in range(0, len(data), 3):
+        satellites.append({
+            'name': data[i].strip(),
+            'catalog_number': data[i+1][2:7],
+            'id': data[i+1][9:17],
+            'line1': data[i+1],
+            'line2': data[i+2],
+            'category': 0
+        })
+    return jsonify(satellites)
 
 
 @blueprint.route('/satellite_position.json')
