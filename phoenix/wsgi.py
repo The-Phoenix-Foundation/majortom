@@ -1,8 +1,5 @@
-import app
+import app as majortom
 
-def run():
-    app.run()
+app = majortom.create_app()
 
-if __name__ == "__main__":
-    run()
 

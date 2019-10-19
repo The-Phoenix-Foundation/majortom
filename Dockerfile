@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 ENV FLASK_APP="phoenix.app:create_app()"
 
-CMD gunicorn -w 4 wsgi:run
+CMD gunicorn -w 4 wsgi:app
