@@ -1,0 +1,16 @@
+
+
+FROM r-base:3.6.1
+
+RUN mkdir /mylibs
+ENV R_LIBS /mylibs
+
+ADD shiny/dependencies.R /dependencies.R
+
+USER root
+RUN Rscript /dependencies.R
+
+ADD shiny /shiny
+
+WORKDIR /shiny/majortom
+CMD Rscript app.R

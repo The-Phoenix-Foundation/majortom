@@ -1,7 +1,7 @@
 # total major tom deployment setup
 version: "3.7"
 services:
-  majortom_api:
+  api:
     build: ./
     ports:
       - "127.0.0.1:8000:8000"
@@ -9,3 +9,10 @@ services:
       - type: bind
         source: ../majortom.yml
         target: /majortom.yml
+  shiny:
+    build: 
+      dockerfile: Dockerfile.shiny
+      context: ./
+    ports:
+      - "127.0.0.1:5777:5777"
+
