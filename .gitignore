@@ -1,2 +1,6 @@
 __pycache__
 venv
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata

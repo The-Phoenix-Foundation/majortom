@@ -1,0 +1,114 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(nasadata)
+library(readr)
+library(lubridate)
+library(tidyverse)
+library(leaflet)
+```
+
+```{r}
+lat <- 48.210033
+lon <- 16.363449
+#key=
+```
+
+
+```{r}
+test <- nasadata::earth_image(key,lon,lat,"2019-10-19")
+
+test <- nasadata::earth_event()
+```
+
+```{r}
+
+satcat <- read_table("majortom/satcat.txt", col_names = F)# %>%
+
+
+active <- read_tsv("majortom/meta/active.tsv", col_names = c("ID","subclass","class"))
+weather <- read_tsv("majortom/meta/weather_earth.tsv", col_names = c("ID","subclass","class"))
+scientific <- read_tsv("majortom/meta/science.tsv", col_names = c("ID","subclass","class"))
+comm <- read_tsv("majortom/meta/comm.tsv", col_names = c("ID","subclass","class"))
+nav <- read_tsv("majortom/meta/nav.tsv", col_names = c("ID","subclass","class"))
+misc <- read_tsv("majortom/meta/misc.tsv", col_names = c("ID","subclass","class"))
+
+satcat_meta <- read_table("majortom/satcat.txt", col_names = F) %>% 
+  mutate(weather = case_when( X2 %in% weather$ID ~ 1, TRUE ~ 0)) %>% 
+  mutate(sci = case_when( X2 %in% scientific$ID ~ 1, TRUE ~ 0)) %>% 
+  mutate(comm = case_when( X2 %in% comm$ID ~ 1, TRUE ~ 0)) %>% 
+  mutate(nav = case_when( X2 %in% nav$ID ~ 1, TRUE ~ 0)) %>% 
+  mutate(misc = case_when( X2 %in% misc$ID ~ 1, TRUE ~ 0))
+
+meta <- read_tsv("majortom/meta/meta.tsv", col_names = F) %>% rename(ID=X1) %>% 
+  pivot_wider(names_from = X3, values_from = X2)
+
+
+
+```
+
+
+```{r}
+sat <- satcat_meta %>% filter(X2==26388) %>% select(4,15:19)
+        
+ggradar(sat,
+        axis.labels = c("Weather & Earth","Scientific","Communications","Navigation","Misc"),
+        grid.label.size=0,
+        grid.line.width=0,
+        group.point.size = 0,
+        gridline.mid.colour = "black",
+        axis.line.colour = "black")
+
+# + theme(legend.title = element_text("Satellite"))
+
+```
+
+```{r}
+# http://benalexkeen.com/creating-a-timeline-graphic-using-r-and-ggplot2/
+year_date_range <- seq(min(satcat_meta$X6), max(satcat_meta$X6), by='year')
+year_date_range <- as.Date(
+    intersect(
+        ceiling_date(year_date_range, unit="year"),
+        floor_date(year_date_range, unit="year")
+    ),  origin = "1970-01-01"
+)
+year_format <- format(year_date_range, '%Y')
+year_df <- data.frame(year_date_range, year_format)
+
+year(time$X6)
+
+time %>% ggplot() +
+  geom_text( aes(x=years, y=0, label=X4), position="jitter" )# +
+#+ geom_text( aes(x=year(X6), y=0, label = V2), position="jitter" )
+  geom_hline( yintercept=0, size=1, scale="date" ) +
+  geom_segment( aes(x = year(X6), y=0, xend=year(X6), yend=0, alpha=.7 ))
+
+time <- satcat_meta %>%
+  filter(X4=="DOVE PIONEER") %>% 
+  select(4,6,8)
+
+date(time$X6)
+
+time %>% ggplot(.,aes(x=year(X6),y=0, colour=X4)) +#, col=status, label=milestone))
+         theme_classic() +
+         geom_hline(yintercept=0, color = "black", size=0.3) +
+         geom_segment(aes(y=year(X6),yend=0,xend=year(X6)), color='black', size=0.2) +
+         geom_label(aes(y=year(X6),label=date(X6)),color="black") +
+         xlim(1970,year(now())) +
+         geom_point(aes(y=0), size=3) +
+         theme(axis.line.y=element_blank(),
+                 axis.text.y=element_blank(),
+                 axis.title.x=element_blank(),
+                 axis.title.y=element_blank(),
+                 axis.ticks.y=element_blank(),
+                 axis.ticks.x =element_blank(),
+                 axis.line.x =element_blank(),
+                 legend.position = "bottom",
+                 legend.title = element_blank()
+                ) +
+          ggtitle("Launch Date")
+```
+
