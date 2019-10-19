@@ -36,8 +36,15 @@ wwd.addLayer(BMNGLayer);
 // The StarField layer should be added before the Atmosphere layer.
 var starFieldLayer = new WorldWind.StarFieldLayer();
 var atmosphereLayer = new WorldWind.AtmosphereLayer();
+var satellitesLayer = new WorldWind.RenderableLayer("satellites");
+var placemarkLayer = new WorldWind.RenderableLayer("Placemarks");
+var pathsLayer = new WorldWind.RenderableLayer("Paths");
+        
 wwd.addLayer(starFieldLayer);
 wwd.addLayer(atmosphereLayer);
+wwd.addLayer(placemarkLayer);
+wwd.addLayer(satellitesLayer);
+wwd.addLayer(pathsLayer);
 
 // Set a date property for the StarField and Atmosphere layers to the current date and time.
 // This enables the Atmosphere layer to show a night side (and dusk/dawn effects in Earth's terminator).
@@ -51,6 +58,31 @@ var simulatedMillisPerDay = 8000;
 
 // Begin the simulation at the current time as provided by the browser.
 var startTimeMillis = Date.now();
+
+function renderSatellitePath(satellite) {
+    var position = new WorldWind.Position(satellite.latitude, satellite.longitude, satellite.height);
+    var pathAttributes = new WorldWind.ShapeAttributes(null);
+    pathAttributes.outlineColor = WorldWind.Color.BLUE;
+    pathAttributes.interiorColor = new WorldWind.Color(0, 1, 1, 0.5);
+    pathAttributes.drawVerticals = false; //Draw verticals only when extruding.
+    var path = new WorldWind.Path(satellite.pathPositions, pathAttributes);
+    path.altitudeMode = WorldWind.RELATIVE_TO_GROUND; // The path's altitude stays relative to the terrain's altitude.
+    path.followTerrain = false;
+    path.extrude = pathAttributes.drawVerticals; // Make it a curtain.
+    path.useSurfaceShapeFor2D = true; // Use a surface shape in 2D mode.
+    pathsLayer.addRenderable(path);   
+}
+
+function renderSatellite(satellite) {
+    var position = new WorldWind.Position(satellite.latitude, satellite.longitude, satellite.height);
+    var colladaLoader = new WorldWind.ColladaLoader(position);
+    colladaLoader.init({dirPath: ''});
+    colladaLoader.load('satellite.dae', function (scene) {
+        scene.scale = 10000;
+        satellitesLayer.addRenderable(scene); // Add the Collada model to the renderable layer within a callback.
+    });
+    
+}
 
 function runSimulation() {
     // Compute the number of simulated days (or fractions of a day) since the simulation began.
@@ -76,15 +108,50 @@ requestAnimationFrame(runSimulation);
 // Create a layer manager for controlling layer visibility.
 //var layerManager = new LayerManager(wwd);
 
+var height = 100000;
+var satellite = {
+    latitude: 45.1366909,
+    longitude: 18.3394671,
+    height: height,
+    pathPositions: [
+      new WorldWind.Position(45.1366909, 18.3394671, height), 
+      new WorldWind.Position(46.1366909, 19.3394671, height),
+      new WorldWind.Position(45.1366909, 18.3394671, height)
+    ],
+} 
+renderSatellite(satellite);
+renderSatellitePath(satellite);
+
 showLocation()
+
+
 
 function showLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(location) {
-            wwd.goTo(new WorldWind.Location(location.coords.latitude, location.coords.longitude));
-            console.log(location.coords.latitude);
-            console.log(location.coords.longitude);
-            console.log(location.coords.accuracy);
+            var userLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 0);
+            var pinLibrary = WorldWind.configuration.baseUrl + "images/pushpins/";
+            wwd.goTo(userLocation);
+            var placemarkAttributes = new WorldWind.PlacemarkAttributes(null);
+            placemarkAttributes.imageScale = 1;
+            placemarkAttributes.imageOffset = new WorldWind.Offset(
+                WorldWind.OFFSET_FRACTION, 0.3,
+                WorldWind.OFFSET_FRACTION, 0.0);
+            placemarkAttributes.imageColor = WorldWind.Color.WHITE;
+            placemarkAttributes.labelAttributes.offset = new WorldWind.Offset(
+                WorldWind.OFFSET_FRACTION, 0.5,
+                WorldWind.OFFSET_FRACTION, 1.0);
+            placemarkAttributes.labelAttributes.color = WorldWind.Color.YELLOW;
+            placemarkAttributes.drawLeaderLine = true;
+            placemarkAttributes.leaderLineAttributes.outlineColor = WorldWind.Color.RED;
+            placemarkAttributes.imageSource = pinLibrary + 'castshadow-red.png';
+
+            placemark = new WorldWind.Placemark(userLocation, true, placemarkAttributes);
+            placemark.label = "Your position\n"
+                + "Lat " + placemark.position.latitude.toPrecision(4).toString() + "\n"
+                + "Lon " + placemark.position.longitude.toPrecision(5).toString();
+            placemark.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
+            placemarkLayer.addRenderable(placemark);
         });
     }   
 }
