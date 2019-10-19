@@ -37,9 +37,9 @@ function loadSatellites() {
 // convert radians position and height in KM
 function positionToDegreesKm(pos) {
 
-    pos['logitude'] = satellite.radiansToDegrees(pos['logitude']);
+    pos['longitude'] = satellite.radiansToDegrees(pos['longitude']);
     pos['latitude'] = satellite.radiansToDegrees(pos['latitude']);
-    pos['altitude'] = pos['altitude'] * 1000.0;
+    pos['altitude'] = pos['height'] * 1000.0;
 
     return pos;
 }
@@ -53,11 +53,11 @@ function tle2orbit(tleLine1, tleLine2) {
 
     var sampleTime = new Date();
     // 
-    var totalOrbitTimeMilis = 127 * 60 * 1000;
-    var sampleCnt = 10;
+    var totalOrbitTimeMilis = 60 * 60 * 1000;
+    var sampleCnt = 100;
     var sampleInterval = totalOrbitTimeMilis / sampleCnt;
     var orbitPosList = [];
-    for (var i = 0; i < sampleCnt; i++) {
+    for (var i = - sampleCnt/2; i < sampleCnt/2; i++) {
         var sampleOffset = i * sampleInterval;
         var sampleTime = new Date(sampleTime.getTime() + sampleOffset);
         var positionAndVelocity = satellite.propagate(satrec, sampleTime);

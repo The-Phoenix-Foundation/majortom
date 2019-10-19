@@ -2,74 +2,58 @@ function jsonCopy(src) {
   return JSON.parse(JSON.stringify(src));
 }
 var satelliteObjects = {}
+var filteredSatellites =[];
+var userLocation = {latitude: 0, longitude:0};
 var satelliteOrbitsDrawn = false;
 
 function renderSatellite(satellite) {
-    var position = new WorldWind.Position(satellite.latitude, satellite.longitude, satellite.height);
+    var currentSatelitePos = currentSatellitePos[satellite.id];
+    var position = new WorldWind.Position(currentSatelitePos.latitude, currentSatelitePos.longitude, currentSatelitePos.altitude);
     var colladaLoader = new WorldWind.ColladaLoader(position);
-    //var scene = colladaLoader.parse(satelliteModelMap['satellite']);
-    //scene.scale = 10000;
-    //scene.position = position;
-    //satellitesLayer.addRenderable(scene);
-    //satelliteObjects[satellite.id] = {'scene': scene, 'data': satellite};
+    var scene = colladaLoader.parse(satelliteModelMap['satellite']);
+    scene.scale = 10000;
+    scene.position = position;
+    satellitesLayer.addRenderable(scene);
+    satelliteObjects[satellite.id] = {'scene': scene, 'data': satellite};
 }
 
+function renderSatellites()  {
+    for (var i = 0; i< filteredSatellites.length;i++) {
+        var satellite = filteredSatellites[i];
+        renderSatellite(satellite);
+    }
+}
 
 function renderSatelliteOrbits() {
+   var colors = [WorldWind.Color.BLUE, WorldWind.Color.RED, WorldWind.Color.GREEN, WorldWind.Color.CYAN, WorldWind.Color.MAGENTA, 
+                  WorldWind.Color.YELLOW];
 
-   for (var key in satelliteOrbits) {
-       var orbit = satelliteOrbits[key];
-       var positions = [];
-       for (var i=0;i<orbit.length;i++) {
+   for (var sIdx = 0; sIdx< filteredSatellites.length;sIdx++) {
+        var satellite = filteredSatellites[sIdx];
+        var orbit = satelliteOrbits[satellite.id];
+        var colorIdx = sIdx % colors.length;
+        var positions = [];
+        for (var i=0;i<orbit.length;i++) {
            var point = orbit[i];
-           positions.push(new WorldWind.Position(point.latitude, point.longitude, point.altitude))
-       }
-       renderSatellitePath(positions);
+           positions.push(new WorldWind.Position(point.latitude, point.longitude, 10000))
+        }
+        renderSatellitePath(positions,colors[colorIdx]);
    }
 }
 
-function renderSatellitePath(positions) {
+function renderSatellitePath(positions, color) {  
     var pathAttributes = new WorldWind.ShapeAttributes(null);
-    pathAttributes.outlineColor = WorldWind.Color.BLUE;
+    pathAttributes.outlineColor = color;
     pathAttributes.interiorColor = new WorldWind.Color(0, 1, 1, 0.5);
     pathAttributes.drawVerticals = false; //Draw verticals only when extruding.
     var path = new WorldWind.Path(positions, pathAttributes);
-    path.altitudeMode = WorldWind.RELATIVE_TO_GROUND; // The path's altitude stays relative to the terrain's altitude.
+    path.altitudeMode = WorldWind.ABSOLUTE; // The path's altitude stays relative to the terrain's altitude.
+    //path.pathType = WorldWind.RHUMB_LINE;
     path.followTerrain = false;
     path.extrude = pathAttributes.drawVerticals; // Make it a curtain.
     path.useSurfaceShapeFor2D = true; // Use a surface shape in 2D mode.
     pathsLayer.addRenderable(path);   
 }
-
-/*function loadSatellites(){
-    var height = 100000;
-    var satellites = [{
-        id: "1",
-        latitude: 45.1366909,
-        longitude: 18.3394671,
-        height: height,
-        pathPositions: [
-          new WorldWind.Position(45.1366909, 18.3394671, height), 
-          new WorldWind.Position(46.1366909, 19.3394671, height),
-          new WorldWind.Position(45.1366909, 18.3394671, height)
-        ],
-    }]; 
-    for (var i=0;i<satellites.length;i++){
-        renderSatellite(satellites[i]);
-    }
-    return;
-    fetch('https://phoenix.outdated.at/majortom/v1.0/satellites')
-      .then(function(response) {
-        return response.json()
-      }).then(function(json) {
-        satellites = json;
-        console.log('parsed json', satellites)
-                
-      }).catch(function(ex) {
-        console.log('parsing failed', ex)
-      });
-}
-*/
 
 function loadSatelliteModels() {
     var satelliteModels = ['satellite'];
@@ -90,7 +74,7 @@ function loadSatelliteModels() {
 function showLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(location) {
-            var userLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 0);
+            userLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 0);
             var pinLibrary = WorldWind.configuration.baseUrl + "images/pushpins/";
             wwd.goTo(userLocation);
             var placemarkAttributes = new WorldWind.PlacemarkAttributes(null);
@@ -202,7 +186,13 @@ requestAnimationFrame(runAnimation);
 showLocation()
 
 loadSatellites().then(function(){
+    filteredSatellites = satellites.filter(function(s){
+        var currentSatelitePosition = currentSatellitePos[s.id];
+        return satellite_in_distance(currentSatelitePosition, userLocation, 1000 )
+    })
+   
     renderSatelliteOrbits();
+    //renderSatellites();
 });
 
 
