@@ -7,8 +7,8 @@ var userLocation = {latitude: 0, longitude:0};
 var satelliteOrbitsDrawn = false;
 
 function renderSatellite(satellite) {
-    var currentSatelitePos = currentSatellitePos[satellite.id];
-    var position = new WorldWind.Position(currentSatelitePos.latitude, currentSatelitePos.longitude, currentSatelitePos.altitude);
+    var currentSatelitePosition = currentSatellitePos[satellite.id];
+    var position = new WorldWind.Position(currentSatelitePosition.latitude, currentSatelitePosition.longitude, currentSatelitePosition.altitude);
     var colladaLoader = new WorldWind.ColladaLoader(position);
     var scene = colladaLoader.parse(satelliteModelMap['satellite']);
     scene.scale = 10000;
@@ -49,7 +49,7 @@ function renderSatellitePath(positions, color) {
     pathAttributes.drawVerticals = false; //Draw verticals only when extruding.
     var path = new WorldWind.Path(positions, pathAttributes);
     path.altitudeMode = WorldWind.ABSOLUTE; // The path's altitude stays relative to the terrain's altitude.
-    //path.pathType = WorldWind.RHUMB_LINE;
+    //path.pathType = WorldWind.LINEAR;
     path.followTerrain = false;
     path.extrude = pathAttributes.drawVerticals; // Make it a curtain.
     path.useSurfaceShapeFor2D = true; // Use a surface shape in 2D mode.

@@ -20,10 +20,11 @@ function loadSatellites() {
       }).then(function(json) {
         satellites = json;
         console.log('parsed json of ', satellites.length, ' objects.')
+        var sampleTime = new Date();
         for (var s = 0; s < satellites.length; s++) {
             var sat = satellites[s];
-            satelliteOrbits[sat.id] = tle2orbit(sat.line1, sat.line2);
-            currentSatellitePos[sat.id] = tle2currentGeodetic(sat.line1, sat.line2);
+            satelliteOrbits[sat.id] = tle2orbit(sat.line1, sat.line2, sampleTime);
+            currentSatellitePos[sat.id] = tle2currentGeodetic(sat.line1, sat.line2, sampleTime);
         }
       }).catch(function(ex) {
         console.log('parsing failed', ex)
@@ -45,13 +46,26 @@ function positionToDegreesKm(pos) {
 }
 
 
-function tle2orbit(tleLine1, tleLine2) {
+function tle2currentGeodetic(tleLine1, tleLine2, sampleTime) {
+    // Initialize a satellite record
+    var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
+
+    //  Or you can use a JavaScript Date
+    var positionAndVelocity = satellite.propagate(satrec, sampleTime);
+    var gmst = satellite.gstime(sampleTime);
+    var positionEci = positionAndVelocity.position;
+
+    var geodetic = satellite.eciToGeodetic(positionEci, gmst);
+
+    return positionToDegreesKm(geodetic);
+}
+
+function tle2orbit(tleLine1, tleLine2, sampleTime) {
     var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
 
     // LEO satellites have an orbit of ca 127min
     // we use this for orbit propagation calc
 
-    var sampleTime = new Date();
     // 
     var totalOrbitTimeMilis = 60 * 60 * 1000;
     var sampleCnt = 100;
@@ -59,28 +73,10 @@ function tle2orbit(tleLine1, tleLine2) {
     var orbitPosList = [];
     for (var i = - sampleCnt/2; i < sampleCnt/2; i++) {
         var sampleOffset = i * sampleInterval;
-        var sampleTime = new Date(sampleTime.getTime() + sampleOffset);
-        var positionAndVelocity = satellite.propagate(satrec, sampleTime);
-
-        var gmst = satellite.gstime(sampleTime);
-        var geodeticPos = satellite.eciToGeodetic(positionAndVelocity.position, gmst);
- 
-        orbitPosList.push(positionToDegreesKm(geodeticPos));
+        var newDate = new Date(sampleTime.getTime() + sampleOffset);
+        orbitPosList.push(tle2currentGeodetic(tleLine1,tleLine2,newDate));
     }
-
     return orbitPosList;
 }
 
-function tle2currentGeodetic(tleLine1, tleLine2) {
-    // Initialize a satellite record
-    var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
 
-    //  Or you can use a JavaScript Date
-    var positionAndVelocity = satellite.propagate(satrec, new Date());
-    var gmst = satellite.gstime(new Date());
-    var positionEci = positionAndVelocity.position;
-
-    var geodetic = satellite.eciToGeodetic(positionEci, gmst);
-
-    return positionToDegreesKm(geodetic);
-}
