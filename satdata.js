@@ -34,6 +34,15 @@ function loadSatellites() {
 }
 
 
+// convert radians position and height in KM
+function positionToDegreesKm(pos) {
+
+    pos['logitude'] = satellite.radiansToDegrees(pos['logitude']);
+    pos['latitude'] = satellite.radiansToDegrees(pos['latitude']);
+    pos['altitude'] = pos['altitude'] * 1000.0;
+
+    return pos;
+}
 
 
 function tle2orbit(tleLine1, tleLine2) {
@@ -56,7 +65,7 @@ function tle2orbit(tleLine1, tleLine2) {
         var gmst = satellite.gstime(sampleTime);
         var geodeticPos = satellite.eciToGeodetic(positionAndVelocity.position, gmst);
  
-        orbitPosList.push(geodeticPos)
+        orbitPosList.push(positionToDegreesKm(geodeticPos));
     }
 
     return orbitPosList;
@@ -73,5 +82,5 @@ function tle2currentGeodetic(tleLine1, tleLine2) {
 
     var geodetic = satellite.eciToGeodetic(positionEci, gmst);
 
-    return geodetic;
+    return positionToDegreesKm(geodetic);
 }
