@@ -1,87 +1,90 @@
-// Create a WorldWindow for the canvas.
-var wwd = new WorldWind.WorldWindow("canvasOne");
+/*
+ * Copyright 2015-2017 WorldWind Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ *  Illustrates how to animate the passage of time with a day/night cycle on the surface of the globe,
+ *  as well as the starry sky above the Earth (with realistic star positions).
+ */
 
-wwd.addLayer(new WorldWind.BMNGOneImageLayer());
-wwd.addLayer(new WorldWind.BMNGLandsatLayer());
+// Tell WorldWind to log only warnings and errors.
+WorldWind.Logger.setLoggingLevel(WorldWind.Logger.LEVEL_WARNING);
 
-wwd.addLayer(new WorldWind.CompassLayer());
-wwd.addLayer(new WorldWind.CoordinatesDisplayLayer(wwd));
-wwd.addLayer(new WorldWind.ViewControlsLayer(wwd));
+// Create the WorldWindow.
+var wwd = new WorldWind.WorldWindow('canvasOne');
 
-// Add a placemark
-var placemarkLayer = new WorldWind.RenderableLayer();
-wwd.addLayer(placemarkLayer);
+// Create imagery layers.
+var BMNGOneImageLayer = new WorldWind.BMNGOneImageLayer();
+var BMNGLayer = new WorldWind.BMNGLayer();
+wwd.addLayer(BMNGOneImageLayer);
+wwd.addLayer(BMNGLayer);
 
-var placemarkAttributes = new WorldWind.PlacemarkAttributes(null);
+// Use the StarField layer to show stars and the Sun around the globe, and the Atmosphere layer to display
+// the atmosphere effect and the night side of the Earth.
+// Note that the StarField layer requires a dark canvas background color.
+// The StarField layer should be added before the Atmosphere layer.
+var starFieldLayer = new WorldWind.StarFieldLayer();
+var atmosphereLayer = new WorldWind.AtmosphereLayer();
+wwd.addLayer(starFieldLayer);
+wwd.addLayer(atmosphereLayer);
 
-placemarkAttributes.imageOffset = new WorldWind.Offset(
-    WorldWind.OFFSET_FRACTION, 0.3,
-    WorldWind.OFFSET_FRACTION, 0.0);
+// Set a date property for the StarField and Atmosphere layers to the current date and time.
+// This enables the Atmosphere layer to show a night side (and dusk/dawn effects in Earth's terminator).
+// The StarField layer positions its stars according to this date.
+var now = new Date();
+starFieldLayer.time = now;
+atmosphereLayer.time = now;
 
-placemarkAttributes.labelAttributes.offset = new WorldWind.Offset(
-    WorldWind.OFFSET_FRACTION, 0.5,
-    WorldWind.OFFSET_FRACTION, 1.0);
+// In this example, each full day/night cycle lasts 8 seconds in real time.
+var simulatedMillisPerDay = 8000;
 
-placemarkAttributes.imageSource = WorldWind.configuration.baseUrl + "images/pushpins/plain-red.png";
+// Begin the simulation at the current time as provided by the browser.
+var startTimeMillis = Date.now();
 
-var position = new WorldWind.Position(55.0, -106.0, 100.0);
-var placemark = new WorldWind.Placemark(position, false, placemarkAttributes);
+function runSimulation() {
+    // Compute the number of simulated days (or fractions of a day) since the simulation began.
+    var elapsedTimeMillis = Date.now() - startTimeMillis;
+    var simulatedDays = elapsedTimeMillis / simulatedMillisPerDay;
 
-placemark.label = "Placemark\n" +
-    "Lat " + placemark.position.latitude.toPrecision(4).toString() + "\n" +
-    "Lon " + placemark.position.longitude.toPrecision(5).toString();
-placemark.alwaysOnTop = true;
+    // Compute a real date in the future given the simulated number of days.
+    var millisPerDay = 24 * 3600 * 1000; // 24 hours/day * 3600 seconds/hour * 1000 milliseconds/second
+    var simulatedMillis = simulatedDays * millisPerDay;
+    var simulatedDate = new Date(startTimeMillis + simulatedMillis);
 
-placemarkLayer.addRenderable(placemark);
+    // Update the date in both the Starfield and the Atmosphere layers.
+    //starFieldLayer.time = simulatedDate;
+    //atmosphereLayer.time = simulatedDate;
+    wwd.redraw(); // Update the WorldWindow scene.
 
-// Add a polygon
-var polygonLayer = new WorldWind.RenderableLayer();
-wwd.addLayer(polygonLayer);
+    requestAnimationFrame(runSimulation);
+}
 
-var polygonAttributes = new WorldWind.ShapeAttributes(null);
-polygonAttributes.interiorColor = new WorldWind.Color(0, 1, 1, 0.75);
-polygonAttributes.outlineColor = WorldWind.Color.BLUE;
-polygonAttributes.drawOutline = true;
-polygonAttributes.applyLighting = true;
+// Animate the starry sky as well as the globe's day/night cycle.
+requestAnimationFrame(runSimulation);
 
-var boundaries = [];
-boundaries.push(new WorldWind.Position(20.0, -75.0, 700000.0));
-boundaries.push(new WorldWind.Position(25.0, -85.0, 700000.0));
-boundaries.push(new WorldWind.Position(20.0, -95.0, 700000.0));
+// Create a layer manager for controlling layer visibility.
+//var layerManager = new LayerManager(wwd);
 
-var polygon = new WorldWind.Polygon(boundaries, polygonAttributes);
-polygon.extrude = true;
-polygonLayer.addRenderable(polygon);
+showLocation()
 
-// Add a COLLADA model
-var modelLayer = new WorldWind.RenderableLayer();
-wwd.addLayer(modelLayer);
-
-var position = new WorldWind.Position(10.0, -125.0, 800000.0);
-var config = {dirPath: WorldWind.configuration.baseUrl + 'examples/collada_models/duck/'};
-
-var colladaLoader = new WorldWind.ColladaLoader(position, config);
-colladaLoader.load("duck.dae", function (colladaModel) {
-    colladaModel.scale = 9000;
-    modelLayer.addRenderable(colladaModel);
-});
-
-// Add WMS imagery
-var serviceAddress = "https://neo.sci.gsfc.nasa.gov/wms/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0";
-var layerName = "MOD_LSTD_CLIM_M";
-
-var createLayer = function (xmlDom) {
-    var wms = new WorldWind.WmsCapabilities(xmlDom);
-    var wmsLayerCapabilities = wms.getNamedLayer(layerName);
-    var wmsConfig = WorldWind.WmsLayer.formLayerConfiguration(wmsLayerCapabilities);
-    var wmsLayer = new WorldWind.WmsLayer(wmsConfig);
-    wwd.addLayer(wmsLayer);
-};
-
-var logError = function (jqXhr, text, exception) {
-    console.log("There was a failure retrieving the capabilities document: " +
-        text +
-    " exception: " + exception);
-};
-
-$.get(serviceAddress).done(createLayer).fail(logError);
+function showLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(location) {
+            wwd.goTo(new WorldWind.Location(location.coords.latitude, location.coords.longitude));
+            console.log(location.coords.latitude);
+            console.log(location.coords.longitude);
+            console.log(location.coords.accuracy);
+        });
+    }   
+}
