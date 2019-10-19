@@ -3,4 +3,5 @@ version: "3.7"
 services:
   majortom_api:
     build: ./
-
+    ports:
+      - 127.0.0.1:8000:8000
