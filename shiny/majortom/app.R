@@ -5,7 +5,10 @@ library(tidyverse)
 library(glue)
 library(ggradar)
 
-satcat <- read_csv("~/space/majortom/shiny/majortom/satcat_meta.csv")
+csv_path <- Sys.getenv(c("SATCAT_CSV"))
+cat('using metdata path', csv_path)
+
+satcat <- read_csv(csv_path)
 
 ui <- fluidPage(
 
@@ -77,4 +80,4 @@ server <- function(input, output) {
 }
 
 # Run the application 
-shinyApp(ui = ui, server = server)
+shinyApp(ui = ui, server = server, options = list(port=5777))

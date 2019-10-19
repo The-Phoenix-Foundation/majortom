@@ -8,12 +8,13 @@ ADD shiny/dependencies.R /dependencies.R
 ADD shiny/majortom.yml /
 RUN conda env create -f /majortom.yml && conda clean -a
 
-RUN conda init
+#RUN conda init bash
 ENV PATH /opt/conda/envs/majortom/bin:$PATH
 
-RUN conda activate majortom && Rscript /dependencies.R
+RUN Rscript /dependencies.R
 
 ADD shiny /shiny
+ENV SATCAT_CSV /shiny/majortom/satcat_meta.csv
 
 WORKDIR /shiny/majortom
 CMD Rscript app.R
