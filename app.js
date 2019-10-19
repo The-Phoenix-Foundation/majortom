@@ -13,6 +13,7 @@ function renderSatellite(satellite) {
     var scene = colladaLoader.parse(satelliteModelMap['satellite']);
     scene.scale = 10000;
     scene.position = position;
+    scene.altitudeMode = WorldWind.ABSOLUTE;
     satellitesLayer.addRenderable(scene);
     satelliteObjects[satellite.id] = {'scene': scene, 'data': satellite};
 }
@@ -35,7 +36,7 @@ function renderSatelliteOrbits() {
         var positions = [];
         for (var i=0;i<orbit.length;i++) {
            var point = orbit[i];
-           positions.push(new WorldWind.Position(point.latitude, point.longitude, 10000))
+           positions.push(new WorldWind.Position(point.latitude, point.longitude, point.altitude))
         }
         renderSatellitePath(positions,colors[colorIdx]);
    }
@@ -175,7 +176,7 @@ function runAnimation() {
     // Update the date in both the Starfield and the Atmosphere layers.
     //starFieldLayer.time = simulatedDate;
     //atmosphereLayer.time = simulatedDate;
-    if (++last % 120 == 0) updateSatellitePositions();
+    //if (++last % 120 == 0) updateSatellitePositions();
     wwd.redraw(); // Update the WorldWindow scene.
 
     requestAnimationFrame(runAnimation);
@@ -188,11 +189,11 @@ showLocation()
 loadSatellites().then(function(){
     filteredSatellites = satellites.filter(function(s){
         var currentSatelitePosition = currentSatellitePos[s.id];
-        return satellite_in_distance(currentSatelitePosition, userLocation, 1000 )
+        return satellite_in_distance(currentSatelitePosition, userLocation, 500 )
     })
    
     renderSatelliteOrbits();
-    //renderSatellites();
+    renderSatellites();
 });
 
 
