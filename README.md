@@ -19,7 +19,7 @@ Clicking on the satellites will open an additional menu displaying additional da
 ![img4](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats.jpg)
 ![img5](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats2.jpg)
 
-## Branches
+## Source code
 - [master](https://github.com/The-Phoenix-Foundation/majortom/blob/master/): contains backend
 - [gh-pages](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/): contains frontend
 
