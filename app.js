@@ -7,6 +7,8 @@ var filteredSatellites = [];
 var visibleSatellites = new Set([]);
 var userLocation = {latitude: 0, longitude:0};
 var satelliteOrbitsDrawn = false;
+var satelliteFilterDistanceKm = 1000;
+
 
 function renderSatellite(satellite) {
     var currentSatelitePosition = currentSatellitePos[satellite.id];
@@ -100,7 +102,7 @@ function removeRenderable(layer, removedSatellites) {
 function filterSatellites() {
     newFilteredSatellites = satellites.filter(function(s){
         var currentSatelitePosition = currentSatellitePos[s.id];
-        return satellite_in_distance(currentSatelitePosition, userLocation, 1000 )
+        return satellite_in_distance(currentSatelitePosition, userLocation, satelliteFilterDistanceKm)
     });
     newFilteredIds = new Set(newFilteredSatellites.map(function(x) {
         return x.id;
