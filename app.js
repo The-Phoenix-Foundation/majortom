@@ -141,6 +141,18 @@ function showLocation() {
 
             var pinLibrary = WorldWind.configuration.baseUrl + "images/pushpins/";
             wwd.goTo(userLocation);
+            
+            var colladaLoader = new WorldWind.ColladaLoader(userLocation);
+            colladaLoader.init({dirPath: './'});
+            var placemarkmodel = colladaLoader.load('dish.dae', function(dish) {
+                if (!dish)
+                  return;
+                dish.scale = 500;
+                //dish.position = position;
+                dish.altitudeMode = WorldWind.CLAMP_TO_GROUND;
+                placemarkLayer.addRenderable(dish);
+            });
+
             var placemarkAttributes = new WorldWind.PlacemarkAttributes(null);
             placemarkAttributes.imageScale = 1;
             placemarkAttributes.imageOffset = new WorldWind.Offset(
@@ -152,19 +164,18 @@ function showLocation() {
                 WorldWind.OFFSET_FRACTION, 1.0);
             placemarkAttributes.labelAttributes.color = WorldWind.Color.YELLOW;
             placemarkAttributes.drawLeaderLine = true;
+            placemarkAttributes.dephTest = false;
             placemarkAttributes.leaderLineAttributes.outlineColor = WorldWind.Color.RED;
             placemarkAttributes.imageSource = pinLibrary + 'castshadow-red.png';
-            
-            var placemarkLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 2000); 
-            placemark = new WorldWind.Placemark(placemarkLocation, true, placemarkAttributes);
+            var placeMarkLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 100000);
+            placemark = new WorldWind.Placemark(placeMarkLocation, true, placemarkAttributes);
             placemark.label = "Your position\n"
                 + "Lat " + placemark.position.latitude.toPrecision(4).toString() + "\n"
                 + "Lon " + placemark.position.longitude.toPrecision(5).toString();
-            //placemark.alwaysOnTop = true;
-            placemark.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
-            
-            placemarkLayer.addRenderable(surfCirle);
-            placemarkLayer.addRenderable(placemark);
+            placemark.altitudeMode = WorldWind.ABSOLUTE;
+            circleLayer.addRenderable(surfCirle);
+            //placemarkLayer.addRenderable(placemark);
+
         });
     }   
 }
@@ -190,11 +201,14 @@ wwd.addLayer(BMNGLayer);
 var starFieldLayer = new WorldWind.StarFieldLayer();
 var atmosphereLayer = new WorldWind.AtmosphereLayer();
 var satellitesLayer = new WorldWind.RenderableLayer("satellites");
+var circleLayer = new WorldWind.RenderableLayer("Circle");
+circleLayer.opacity = 0.1;
 var placemarkLayer = new WorldWind.RenderableLayer("Placemarks");
 var pathsLayer = new WorldWind.RenderableLayer("Paths");
         
 wwd.addLayer(starFieldLayer);
 wwd.addLayer(atmosphereLayer);
+wwd.addLayer(circleLayer);
 wwd.addLayer(placemarkLayer);
 wwd.addLayer(satellitesLayer);
 wwd.addLayer(pathsLayer);
