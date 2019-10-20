@@ -6,8 +6,9 @@ MajorTom is an app prototype from [The Phoenix Foundation](https://github.com/Th
 
 **Project page: [The Phoenix Foundation](https://2019.spaceappschallenge.org/challenges/living-our-world/set-your-sights-high/teams/the-phoenix-foundation/project)**
 
+**Project pitch: [pdf of our talk](https://github.com/The-Phoenix-Foundation/majortom/blob/master/tpf.pdf)
 
-Additional features we envision in the future:
+### Additional features we envision in the future:
 - Quizzes that test your obtained satellite knowledge and give different rewards
 - International leaderboards focusing on collected satellites and widest knowledge
 - The ability to invite and compete against your friends
@@ -23,10 +24,6 @@ The satellites are rendered as 3D models that can be collected by clicking on th
 Clicking on the satellites will open an additional menu displaying additional data.
 ![img4](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats.jpg)
 ![img5](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats2.jpg)
-
-## Pitch of vision
-See here for [pitch](https://github.com/The-Phoenix-Foundation/majortom/blob/master/tpf.pdf)
-
 
 ## Source code
 - [master](https://github.com/The-Phoenix-Foundation/majortom): contains backend
