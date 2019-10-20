@@ -10,7 +10,13 @@ Additional features we envision in the future:
 
 
 ## Functionality overview
-Satellite trajectory rendering ![img1](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite.jpg)
+Satellite trajectory rendering 
+![img1](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite.jpg)
+![img2](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite2.jpg)
+![img3](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite2.jpg)
+![img4](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats.jpg)
+![img5](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats2.jpg)
+
 
 
 
