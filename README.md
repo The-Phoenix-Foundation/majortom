@@ -19,10 +19,12 @@ Clicking on the satellites will open an additional menu displaying additional da
 ![img4](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats.jpg)
 ![img5](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats2.jpg)
 
+## Branches
+- master: contains backend
+- gh-pages: contains frontend
 
 
 ## Setup Dev
-
 ```
 pip install -r requirements.txt
 pip install -e .
@@ -30,10 +32,6 @@ export FLASK_APP="phoenix.app:create_app()"
 flask run
 ```
 
-## Stuff
-
-
-Let's collect everything we need here.
 
 ## SOCIAL
 
