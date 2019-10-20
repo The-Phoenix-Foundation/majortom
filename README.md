@@ -1,7 +1,5 @@
-# Team "The Phoenix Foundation"
+# MajorTom - NASA Space Apps Challenge 
 
-
-GITTER: https://gitter.im/spaceapp-phoenix-foundation/community
 
 
 # Setup Dev
@@ -18,9 +16,8 @@ flask run
 
 Let's collect everything we need here.
 
-# TODO
+# SOCIAL
 
-- [ ] pick challenge
-- [ ] sign up [here](https://docs.google.com/forms/d/e/1FAIpQLSd5dTtvmrE9CFOYc8XE8MJ_Wi1CtK44l073tqsgW1N9kVOeaw/viewform)
-- [ ] hackedy hack hack
+- GITTER: https://gitter.im/spaceapp-phoenix-foundation/community
+
 
