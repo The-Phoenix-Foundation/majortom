@@ -2,6 +2,8 @@
 
 MajorTom is an app prototype from [The Phoenix Foundation](https://github.com/The-Phoenix-Foundation) that was developed during the NASA Space Apps Challenge 2019 in Vienna. The app tackles the [set your sights high challenge](https://2019.spaceappschallenge.org/challenges/living-our-world/set-your-sights-high/details) by an gamified AR approach and focuses predominantly on a younger userbase. Satellites approaching the user in 1000 km radius are visualized via [NASA's WorldWind library](https://worldwind.arc.nasa.gov/). These satellites can be selected while the app will display fun facts another fascinating information. Satellites within range can be collected similarly to Pokémon. Collecting and learning more about satellites will unlock different badges and rewards.
 
+**Prototype: [majortom.outdated.at](http://majortom.outdated.at)**
+
 Additional features we envision in the future:
 - Quizzes that test your obtained satellite knowledge and give different rewards
 - International leaderboards focusing on collected satellites and widest knowledge
