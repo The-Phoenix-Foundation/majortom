@@ -5,6 +5,7 @@ var selectedSatellite;
 
 function showPopup(userObject) {
     $('#satelliteName').text(userObject.displayName);
+    $("#info").load("https://phoenix.outdated.at/majortom/v1.0/info/" + userObject.displayName);
     $('#satelliteModal').modal();
     console.log(userObject);
     selectedSatellite = satelliteObjects[userObject.displayName]['satellite']
@@ -30,3 +31,4 @@ function renderSatelliteModel() {
     scene.altitudeMode = WorldWind.ABSOLUTE;
     modelLayer.addRenderable(scene);
 }
+
