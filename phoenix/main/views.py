@@ -80,7 +80,7 @@ def sat_info(sat_id):
             response = make_response("<span>Pick another :) The programmer was too lazy :(</span>", 200)
         else:
             response = make_response(resp.content, 200)
-    response.headers.add('Access-Control-Allow-Origin', 'https://majortom.outdated.at')
+    # response.headers.add('Access-Control-Allow-Origin', 'https://majortom.outdated.at')
     return response
 
 
