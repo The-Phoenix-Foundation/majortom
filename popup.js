@@ -8,9 +8,17 @@ function showPopup(userObject) {
     $("#info").load("https://phoenix.outdated.at/majortom/v1.0/info/" + userObject.displayName);
     $('#satelliteModal').modal();
     console.log(userObject);
-    selectedSatellite = satelliteObjects[userObject.displayName]['satellite']
-    renderSatelliteModel()
+    selectedSatellite = satelliteObjects[userObject.displayName]['data']
+    updateSatelliteStats(selectedSatellite);
+    renderSatelliteModel();
 
+}
+
+function updateSatelliteStats(satellite) {
+    var sat_id = satellite['id'];
+    var sat_catalog = satellite['catalog_number'];
+    var shiny_url = 'https://phoenix.outdated.at/shiny/?catalog_number=' + sat_catalog
+    var stats_frame = document.getElementById("stats_frame").src = shiny_url;
 }
 
 function renderSatelliteModel() {
