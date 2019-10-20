@@ -24,6 +24,7 @@ function showPopup(userObject) {
     updateSatelliteStats(selectedSatellite);
     $('#modelCanvas').height(480).width(640);
     renderSatelliteModel()
+    renderInventory();
 
 }
 
@@ -55,6 +56,25 @@ function renderSatelliteModel() {
     modelLayer.addRenderable(scene);
 }
 
+function renderInventory() {
+    var inventoryContainer  = $('#inventoryContiner');
+    inventoryContainer.empty();
+    for (var i=0;i<collectedSatellites.length;i++) {
+       var collectedSatellite = collectedSatellites[i];
+       var sat = satellites.filter(function(s){
+           return s.id == collectedSatellite;
+       })[0];
+       var li = $('<li style="margin:10px;">');
+       var image = $('<img style="width:60px;height:60px;" src="/models/'+sat.category+'.jpg">');
+       var name = $("<span>").text(collectedSatellite);
+       li.append(image);
+       li.append(name);
+       inventoryContainer.append(li);
+       
+    }
+    console.log(collectedSatellites);
+}
+
 function loadCollectedSats() {
     var sats = getCookie('majortom');
     if (sats === null) {
@@ -67,6 +87,7 @@ function loadCollectedSats() {
 function addSatellite(designator) {
     collectedSatellites.push(designator);
     setCookie('majortom', JSON.stringify(collectedSatellites));
+    renderInventory();
 }
 
 function isCollectedSatellite(designator) {
