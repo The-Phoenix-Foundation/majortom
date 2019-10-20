@@ -43,6 +43,40 @@
     </header>
 
     <main>
+      <div class="modal fade" id='satelliteModal' tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="gridSystemModalLabel">Satellite: <span id='satelliteName'></span></h4>
+            </div>
+            <div class="modal-body">
+              <div>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                  <li role="presentation" class="active"><a href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a></li>
+                  <li role="presentation"><a href="#stats" aria-controls="stats" role="tab" data-toggle="tab">Stats</a></li>
+                  <li role="presentation"><a href="#model" aria-controls="model" role="tab" data-toggle="tab">3D Model</a></li>
+                  <li role="presentation"><a href="#inventory" aria-controls="inventory" role="tab" data-toggle="tab">My inventory</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="info">BlahBlah</div>
+                  <div role="tabpanel" class="tab-pane" id="stats">...</div>
+                  <div role="tabpanel" class="tab-pane" id="model">...</div>
+                  <div role="tabpanel" class="tab-pane" id="inventory">...</div>
+                </div>
+
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
       <section style="padding: 0; overflow: hidden;">
         <div class="fluid-container">
 

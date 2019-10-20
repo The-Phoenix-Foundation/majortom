@@ -205,7 +205,9 @@ var handleClick = function (recognizer) {
     if (pickList.objects.length == 2 && pickList.objects[0].parentLayer.displayName == 'satellites') {
         var position = pickList.objects[0].position;
         var userObject = pickList.objects[0].userObject;
-        alert( userObject.displayName );
+        $('#satelliteName').text(userObject.displayName);
+        $('#satelliteModal').modal();
+
         console.log(pickList.objects[0]);
     }
 };
