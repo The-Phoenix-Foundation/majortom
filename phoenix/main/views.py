@@ -66,10 +66,20 @@ def sat_info(sat_id):
 
     full_sat_id = "%d-%s" % (year, launch_number_str)
 
-    url = "https://celestrak.com/satcat/%d/%s.php#%s" % (year, full_sat_id, launch_piece)
-    resp = requests.get(url)
+    if year >= 2013:
+        # not satcat data on the database
+        response = make_response("<span>Newer than 2012... NO SATCAT DATA AVAILABLE :(</span>", 200)
 
-    response = make_response(resp.content, 200)
+    else:
+
+        url = "https://celestrak.com/satcat/%d/%s.php#%s" % (year, full_sat_id, launch_piece)
+        resp = requests.get(url)
+        try:
+            resp.raise_for_status()
+        except:
+            response = make_response("<span>Pick another :) The programmer was too lazy :(</span>", 200)
+        else:
+            response = make_response(resp.content, 200)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
