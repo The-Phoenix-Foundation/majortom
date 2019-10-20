@@ -10,14 +10,14 @@ Additional features we envision in the future:
 
 
 ## Functionality overview
-Satellite trajectory rendering 
-![img1](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite.jpg)
+Satellite trajectory are rendered as diffreently color coded lines. ![img1](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite.jpg)
+
+The satellites are rendered as 3D modells that can be collected by clicking on them. 
 ![img2](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite2.jpg)
-![img3](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite2.jpg)
+
+Clicking on the satellites will open an additional menu that displays additional data.
 ![img4](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats.jpg)
 ![img5](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats2.jpg)
-
-
 
 
 
