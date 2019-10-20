@@ -131,12 +131,14 @@ function showLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(location) {
             userLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 0); 
+            circleLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 0); 
             var circle_attribs = new WorldWind.ShapeAttributes();
             //circle_attribs.drawInterior = false;
             circle_attribs.interiorColor.alpha = 0.15;
             circle_attribs.interiorColor.blue = 0 ;
             circle_attribs.outlineWidth = 3;
-            surfCirle = new WorldWind.SurfaceCircle(userLocation, satelliteFilterDistanceKm*1000, circle_attribs);
+            surfCirle = new WorldWind.SurfaceCircle(circleLocation, satelliteFilterDistanceKm*1000, circle_attribs);
+
             var pinLibrary = WorldWind.configuration.baseUrl + "images/pushpins/";
             wwd.goTo(userLocation);
             var placemarkAttributes = new WorldWind.PlacemarkAttributes(null);
@@ -152,15 +154,17 @@ function showLocation() {
             placemarkAttributes.drawLeaderLine = true;
             placemarkAttributes.leaderLineAttributes.outlineColor = WorldWind.Color.RED;
             placemarkAttributes.imageSource = pinLibrary + 'castshadow-red.png';
-
-            placemark = new WorldWind.Placemark(userLocation, true, placemarkAttributes);
+            
+            var placemarkLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 2000); 
+            placemark = new WorldWind.Placemark(placemarkLocation, true, placemarkAttributes);
             placemark.label = "Your position\n"
                 + "Lat " + placemark.position.latitude.toPrecision(4).toString() + "\n"
                 + "Lon " + placemark.position.longitude.toPrecision(5).toString();
+            //placemark.alwaysOnTop = true;
             placemark.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
-            placemarkLayer.addRenderable(placemark);
+            
             placemarkLayer.addRenderable(surfCirle);
-
+            placemarkLayer.addRenderable(placemark);
         });
     }   
 }
