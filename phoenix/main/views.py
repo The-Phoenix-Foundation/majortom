@@ -42,6 +42,8 @@ def satellites():
 
 @blueprint.route('/info/<string:sat_id>', methods=['GET'])
 def sat_info(sat_id):
+    # take frontend sat_id and return celestrak metadata html
+    # load via jquery in modal on frontend
     """
     port falkos code to backend
      function get_celestrak_url(internal_designator) {
@@ -68,6 +70,10 @@ def sat_info(sat_id):
     resp = requests.get(url)
     return resp.content
 
+
+@blueprint.route('/satellite_position.json')
+def satellite_position():
+    """not used"""
     # Hardcoded for one satellite
     satellite_name = "ODIN"
     satellite_line1 = '1 26702U 01007A   19291.79098765 -.00000023  00000-0  25505-5 0  9996'
