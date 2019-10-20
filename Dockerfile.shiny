@@ -13,6 +13,8 @@ ENV PATH /opt/conda/envs/majortom/bin:$PATH
 
 RUN Rscript /dependencies.R
 
+RUN apt install -y libcairo2
+
 ADD shiny /shiny
 ENV SATCAT_CSV /shiny/majortom/satcat_meta_active.csv
 
