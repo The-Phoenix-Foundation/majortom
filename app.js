@@ -127,7 +127,10 @@ function update() {
 function showLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(location) {
-            userLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 0);
+            userLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 0); 
+            var circle_attribs = new WorldWind.ShapeAttributes();
+            circle_attribs.drawInterior = false;
+            surfCirle = new WorldWind.SurfaceCircle(userLocation, 100000, circle_attribs);
             var pinLibrary = WorldWind.configuration.baseUrl + "images/pushpins/";
             wwd.goTo(userLocation);
             var placemarkAttributes = new WorldWind.PlacemarkAttributes(null);
@@ -150,6 +153,8 @@ function showLocation() {
                 + "Lon " + placemark.position.longitude.toPrecision(5).toString();
             placemark.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
             placemarkLayer.addRenderable(placemark);
+            placemarkLayer.addRenderable(surfCirle);
+
         });
     }   
 }
