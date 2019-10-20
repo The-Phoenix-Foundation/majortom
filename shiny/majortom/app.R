@@ -1,6 +1,3 @@
-#
-
-
 library(shiny)
 library(tidyverse)
 library(lubridate)
@@ -101,14 +98,14 @@ server <- function(input, output, session) {
             ggplot() + 
             geom_point(aes(x=as.factor(dummy),y=X9),colour="black",alpha=0.3, size=5) + 
             geom_point(data = {. %>% filter(X4==input$name)}, aes(x=as.factor(dummy),y=X9),colour="red", size=10) +
-            geom_label(data = {. %>% filter(X4==input$name)}, aes(x=as.factor(dummy),y=X9,label=X4),nudge_x=0.15) +
+            geom_label(data = {. %>% filter(X4==input$name)}, aes(x=as.factor(dummy),y=X9,label=X4), nudge_x=0.15) +
             theme_minimal() + 
             theme(legend.position = "None",
                   axis.title.x = element_blank(),
                   axis.text.x = element_blank(),
                   axis.text.y = element_text(size=12),
                   axis.title.y = element_text(size=15)) + 
-            ylab("Orbital time [min]")
+            ylab("Orbital period [min]")
     })
     output$launchSite <- renderLeaflet({
         map <- satcat %>% filter(X4 == input$name) %>% left_join(.,launch_locations,by="X7")
