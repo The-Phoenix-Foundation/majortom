@@ -62,7 +62,7 @@
               <div>
 
                 <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist">
+                <ul id='navbar' class="nav nav-tabs" role="tablist">
                   <li role="presentation" class="active"><a href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a></li>
                   <li role="presentation"><a href="#stats" aria-controls="stats" role="tab" data-toggle="tab">Stats</a></li>
                   <li role="presentation"><a href="#model" aria-controls="model" role="tab" data-toggle="tab">3D Model</a></li>
@@ -87,7 +87,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button id="closeBtn" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -140,6 +140,9 @@
             modelwwd.addLayer(modelLayer);
             renderSatelliteModel();
         }
+      });
+      $('#closeBtn').on('click', function(e){
+          $('#navbar a:first').tab('show');
       });
     </script>
   </body>

@@ -93,6 +93,7 @@ function removeRenderable(layer, removedSatellites) {
         var renderable = layer.renderables[i];
         if (removedSatellites.has(renderable.displayName)) {
             layer.removeRenderable(renderable);
+            delete satelliteObjects[renderable.displayName];
         }
     }
 }
