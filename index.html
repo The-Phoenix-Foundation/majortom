@@ -73,7 +73,11 @@
                 <div class="tab-content">
                   <div role="tabpanel" class="tab-pane active" id="info">BlahBlah</div>
                   <div role="tabpanel" class="tab-pane" id="stats">...</div>
-                  <div role="tabpanel" class="tab-pane" id="model">...</div>
+                  <div role="tabpanel" class="tab-pane" id="model">
+                    <canvas id="modelCanvas" width="1024" height="768" style="background-color: black; touch-action: none;">
+                      Your browser does not support HTML5 Canvas.
+                    </canvas>
+                  </div>
                   <div role="tabpanel" class="tab-pane" id="inventory">...</div>
                 </div>
 
@@ -125,5 +129,15 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
     crossorigin="anonymous"></script>
+    <script>
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("href") // activated tab
+        if (target == '#model') {
+            modelwwd = new WorldWind.WorldWindow('modelCanvas');
+            modelwwd.addLayer(modelLayer);
+            renderSatelliteModel();
+        }
+      });
+    </script>
   </body>
 </html>
