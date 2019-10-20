@@ -191,11 +191,31 @@ var now = new Date();
 starFieldLayer.time = now;
 atmosphereLayer.time = now;
 
-// In this example, each full day/night cycle lasts 8 seconds in real time.
-var simulatedMillisPerDay = 8000;
+// The common gesture-handling function.
+var handleClick = function (recognizer) {
+    // Obtain the event location.
+    var x = recognizer.clientX,
+        y = recognizer.clientY;
 
-// Begin the simulation at the current time as provided by the browser.
-var startTimeMillis = Date.now();
+    // Perform the pick. Must first convert from window coordinates to canvas coordinates, which are
+    // relative to the upper left corner of the canvas rather than the upper left corner of the page.
+    var pickList = wwd.pick(wwd.canvasCoordinates(x, y));
+    console.log(pickList);
+    // If only one thing is picked and it is the terrain, use a go-to animator to go to the picked location.
+    if (pickList.objects.length == 2 && pickList.objects[0].parentLayer.displayName == 'satellites') {
+        var position = pickList.objects[0].position;
+        var userObject = pickList.objects[0].userObject;
+        alert( userObject.displayName );
+        console.log(pickList.objects[0]);
+    }
+};
+
+// Listen for mouse clicks.
+var clickRecognizer = new WorldWind.ClickRecognizer(wwd, handleClick);
+
+// Listen for taps on mobile devices.
+var tapRecognizer = new WorldWind.TapRecognizer(wwd, handleClick);
+
 
 
 
@@ -215,18 +235,10 @@ function updateSatellitePositions() {
 
 var last = 0;
 function runAnimation() {
-    // Compute the number of simulated days (or fractions of a day) since the simulation began.
-    var elapsedTimeMillis = Date.now() - startTimeMillis;
-    var simulatedDays = elapsedTimeMillis / simulatedMillisPerDay;
-
-    // Compute a real date in the future given the simulated number of days.
-    var millisPerDay = 24 * 3600 * 1000; // 24 hours/day * 3600 seconds/hour * 1000 milliseconds/second
-    var simulatedMillis = simulatedDays * millisPerDay;
-    var simulatedDate = new Date(startTimeMillis + simulatedMillis);
-
+    var date = new Date();
     // Update the date in both the Starfield and the Atmosphere layers.
-    //starFieldLayer.time = simulatedDate;
-    //atmosphereLayer.time = simulatedDate;
+    starFieldLayer.time = date;
+    atmosphereLayer.time = date;
     updateSatellitePositions();
     if (++last % 300 == 0) update();
     wwd.redraw(); // Update the WorldWindow scene.
