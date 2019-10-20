@@ -42,8 +42,9 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="#">Above</a></li>
-              <li><a href="https://phoenix.outdated.at/shiny">Data</a></li>
+              <li><a href="#" data-toggle="modal" data-target="#aboutModal">About</a></li>
+
+              <li><a target="_blank" href="https://phoenix.outdated.at/shiny">Data</a></li>
             </ul>
           </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
@@ -71,7 +72,7 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                  <div role="tabpanel" class="tab-pane active" id="info">BlahBlah</div>
+                  <div role="tabpanel" class="tab-pane active" id="info"></div>
                   <div role="tabpanel" class="tab-pane" id="stats">
                         <iframe width="640" height="480" id="stats_frame">
                         </iframe>
@@ -98,6 +99,35 @@
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
       </div><!-- /.modal -->
+      <div class="modal fade" id='aboutModal' tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="gridSystemModalLabel">About</h4>
+            </div>
+            <div class="modal-body">
+              <div>
+               <p>
+               MajorTom is a NASA SpaceApp that allows you to track satellite's around you and collect them.
+               <br>A Satallite dish represents your current position and a circle shows you the current range wherein the satellites are displayed.
+                The satellite move in real time along the projected trajectories. 
+                <br>By clicking on a satellite model a popup with additional information is displayed:
+                <ul>
+                  <li><b>Info:</b> Information about the Satellite if available</li>
+                  <li><b>Stats:</b> Fun facts and statistics about the selected Satellite</li>
+                  <li><b>Model:</b> The 3D model of the Satellite</li>
+                  <li><b>Inventory:</b> The user's inventory. The user can add the selected satellite to his/her inventory</li>
+                </ul>
+               </p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button id="closeBtn" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
       <section style="padding: 0; overflow: hidden;">
         <div class="fluid-container" style="background: black; text-align: center;">
 
@@ -105,7 +135,7 @@
             Your browser does not support HTML5 Canvas.
           </canvas>
           <script src="https://cdnjs.cloudflare.com/ajax/libs/satellite.js/3.0.1/satellite.min.js" type="text/javascript"></script>
-          <script src="https://files.worldwind.arc.nasa.gov/artifactory/web/0.9.0/worldwind.js" type="text/javascript"></script>
+          <script src="https://files.worldwind.arc.nasa.gov/artifactory/web/0.9.0/worldwind.min.js" type="text/javascript"></script>
           <script src="popup.js" type="text/javascript"></script>
           <script src="satdata.js" type="text/javascript"></script>
           <script src="long_lat.js" type="text/javascript"></script>

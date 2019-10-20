@@ -198,10 +198,6 @@ var BMNGLayer = new WorldWind.BMNGLayer();
 wwd.addLayer(BMNGOneImageLayer);
 wwd.addLayer(BMNGLayer);
 
-// Use the StarField layer to show stars and the Sun around the globe, and the Atmosphere layer to display
-// the atmosphere effect and the night side of the Earth.
-// Note that the StarField layer requires a dark canvas background color.
-// The StarField layer should be added before the Atmosphere layer.
 var starFieldLayer = new WorldWind.StarFieldLayer();
 var atmosphereLayer = new WorldWind.AtmosphereLayer();
 var satellitesLayer = new WorldWind.RenderableLayer("satellites");
@@ -217,9 +213,6 @@ wwd.addLayer(placemarkLayer);
 wwd.addLayer(satellitesLayer);
 wwd.addLayer(pathsLayer);
 
-// Set a date property for the StarField and Atmosphere layers to the current date and time.
-// This enables the Atmosphere layer to show a night side (and dusk/dawn effects in Earth's terminator).
-// The StarField layer positions its stars according to this date.
 var now = new Date();
 starFieldLayer.time = now;
 atmosphereLayer.time = now;
@@ -267,7 +260,6 @@ function updateSatellitePositions() {
 var last = 0;
 function runAnimation() {
     var date = new Date();
-    // Update the date in both the Starfield and the Atmosphere layers.
     starFieldLayer.time = date;
     atmosphereLayer.time = date;
     updateSatellitePositions();
@@ -276,8 +268,6 @@ function runAnimation() {
 
     requestAnimationFrame(runAnimation);
 }
-
-// Animate the starry sky as well as the globe's day/night cycle.
 requestAnimationFrame(runAnimation);
 showLocation();
 
