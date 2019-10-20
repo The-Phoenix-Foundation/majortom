@@ -60,9 +60,12 @@ function renderInventory() {
     var inventoryContainer  = $('#inventoryContiner');
     inventoryContainer.empty();
     for (var i=0;i<collectedSatellites.length;i++) {
-        var collectedSatellite = collectedSatellites[i];
-       var li = $('<li>');
-       var image = $('<img src=/resources/'+selectedSatellite.category+'.jpg>');
+       var collectedSatellite = collectedSatellites[i];
+       var sat = satellites.filter(function(s){
+           return s.id == collectedSatellite;
+       })[0];
+       var li = $('<li style="margin:10px;">');
+       var image = $('<img style="width:60px;height:60px;" src="/models/'+sat.category+'.jpg">');
        var name = $("<span>").text(collectedSatellite);
        li.append(image);
        li.append(name);
