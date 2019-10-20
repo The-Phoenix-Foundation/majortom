@@ -40,10 +40,10 @@ function renderSatelliteModel() {
        return;
     var satellite = selectedSatellite;
     modelLayer.removeAllRenderables();
-    var currentSatelitePosition = currentSatellitePos[satellite.id];
+    var currentSatelitePosition = new WorldWind.Position(0, 0, 0); //currentSatellitePos[satellite.id];
     var position = new WorldWind.Position(currentSatelitePosition.latitude, currentSatelitePosition.longitude, currentSatelitePosition.altitude);
     var viewPosition = new WorldWind.Position(currentSatelitePosition.latitude, currentSatelitePosition.longitude, 
-                                    currentSatelitePosition.altitude + 251975);
+                                    currentSatelitePosition.altitude + 300000);
     modelwwd.goTo(viewPosition)
     var colladaLoader = new WorldWind.ColladaLoader(position);
     var category = satellite.category;
@@ -53,6 +53,10 @@ function renderSatelliteModel() {
     scene.scale = 10000;
     scene.position = position;
     scene.altitudeMode = WorldWind.ABSOLUTE;
+    scene.xRotation = -35.0;
+    scene.yRotation = -35.0;
+    scene.zRotation = -35.0;
+    //scene.zTranslation = 30.0;
     modelLayer.addRenderable(scene);
 }
 
