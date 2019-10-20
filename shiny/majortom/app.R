@@ -12,17 +12,17 @@ cat('using metadata path', csv_path)
 satcat <- read_csv(csv_path)
 
 ui <- fluidPage(
-
-    # Application title
-    titlePanel("Satellites"),
-    sidebarLayout(
-        sidebarPanel(
-    uiOutput("selector"),
-        ),
-        mainPanel(
-           plotOutput("classRadar"),
+    verticalLayout(
+    tabsetPanel(
+        tabPanel("Satellite",
+            uiOutput("selector")
+            ),
+        tabPanel("Function",
+            plotOutput("classRadar")
+            ),
+        tabPanel("Launch Date",
            plotOutput("launchDate")
-#           htmlOutput("picture")
+            )
         )
     )
 )
@@ -36,7 +36,7 @@ server <- function(input, output, session) {
             selection <- 40697 # SENTINEL-2A
         }
         print(catalog_number)
-        selectInput("name", "Choose satellite", choices = satcat$X4, selected = satcat$X4[satcat$X2==selection])
+        selectInput("name", "Name", choices = satcat$X4, selected = satcat$X4[satcat$X2==selection])
     })
     output$classRadar <- renderPlot({
         curr_sat <- satcat %>% filter(X4 == input$name) %>% select(4,15:19)
@@ -79,7 +79,6 @@ server <- function(input, output, session) {
         data <- satcat %>% filter(X4 == input$name)
         src = "https://nasa3d.arc.nasa.gov/shared_assets/models/acrimsat/acrimsat-428-321.png"
         c('<img src="',src,'">')
-#        print(src)
         print(glue("Origin: {data$X5}"))
         print(glue("Launch Date: {data$X6}"))
     })    
