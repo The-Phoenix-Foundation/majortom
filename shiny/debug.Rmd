@@ -119,3 +119,18 @@ time %>% ggplot(.,aes(x=year(X6),y=0, colour=X4)) +#, col=status, label=mileston
 satcat$X4[satcat$X2==44633]
 ```
 
+```{r}
+satcat_meta_active %>% mutate(soi=case_when(X4 == "STARLETTE" ~ TRUE,
+                                            TRUE ~ FALSE)) %>% 
+                       mutate(CAT=1) %>% 
+            ggplot() + 
+  geom_point(aes(x=as.factor(CAT),y=X9),colour="black",alpha=0.5) + 
+  geom_point(data = {. %>% filter(X4=="STARLETTE")}, aes(x=as.factor(CAT),y=X9),colour="red", size=5) +
+  geom_label(data = {. %>% filter(X4=="STARLETTE")}, aes(x=as.factor(CAT),y=X9,label=X4),nudge_x=0.12) +
+  theme_minimal() + 
+  theme(legend.position = "None",
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank()) + 
+  ylab("Orbital time [min]")
+```
+

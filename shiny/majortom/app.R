@@ -6,7 +6,7 @@ library(lubridate)
 library(glue)
 library(ggradar)
 
-csv_path <- Sys.getenv(c("SATCAT_CSV"))
+#csv_path <- Sys.getenv(c("SATCAT_CSV"))
 cat('using metadata path', csv_path)
 
 satcat <- read_csv(csv_path)
@@ -15,10 +15,11 @@ ui <- fluidPage(
     verticalLayout(
     tabsetPanel(
         tabPanel("Satellite",
-            uiOutput("selector", height=640, width=480)
+            uiOutput("selector", height=640, width=480),
+            plotOutput("orbitTime", height=640, width=480)
             ),
         tabPanel("Function",
-            plotOutput("classRadar", height=640, width=480)
+            plotOutput("classRadar", height=640, width=480),
             ),
         tabPanel("Launch Date",
            plotOutput("launchDate", height=640, width=480)
@@ -87,6 +88,21 @@ server <- function(input, output, session) {
                    `Inclination [deg]`=10) %>% 
             gather()
     }, colnames=FALSE)    
+    output$orbitTime <- renderPlot({
+        satcat %>% 
+            mutate(dummy=1) %>% 
+            ggplot() + 
+            geom_point(aes(x=as.factor(dummy),y=X9),colour="black",alpha=0.3, size=5) + 
+            geom_point(data = {. %>% filter(X4==input$name)}, aes(x=as.factor(dummy),y=X9),colour="red", size=10) +
+            geom_label(data = {. %>% filter(X4==input$name)}, aes(x=as.factor(dummy),y=X9,label=X4),nudge_x=0.15) +
+            theme_minimal() + 
+            theme(legend.position = "None",
+                  axis.title.x = element_blank(),
+                  axis.text.x = element_blank(),
+                  axis.text.y = element_text(size=12),
+                  axis.title.y = element_text(size=15)) + 
+            ylab("Orbital time [min]")
+    })
 }
 
 # Run the application 
