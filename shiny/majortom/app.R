@@ -1,15 +1,19 @@
 #
 
+
 library(shiny)
 library(tidyverse)
 library(lubridate)
 library(glue)
 library(ggradar)
+library(leaflet)
 
-csv_path <- Sys.getenv(c("SATCAT_CSV"))
+csv_path <- Sys.getenv(c("SATCAT_META"))
 cat('using metadata path', csv_path)
 
-satcat <- read_csv(csv_path)
+satcat <- read_csv(file.path(csv_path, "satcat_meta_active.csv"))
+launch_locations <- read_csv(file.path(csv_path, "launch_sites.csv"), col_names = c("X7","Location","Latitude","Longitude"))
+
 
 ui <- fluidPage(
     verticalLayout(
@@ -19,10 +23,13 @@ ui <- fluidPage(
             plotOutput("orbitTime", height=640, width=480)
             ),
         tabPanel("Function",
-            plotOutput("classRadar", height=640, width=480),
+            plotOutput("classRadar", height=640, width=480)
             ),
         tabPanel("Launch Date",
            plotOutput("launchDate", height=640, width=480)
+           ),
+        tabPanel("Launch Site",
+           leafletOutput("launchSite", height=640, width=480)
            ),
         tabPanel("Information",
            tableOutput("infotable")
@@ -102,6 +109,13 @@ server <- function(input, output, session) {
                   axis.text.y = element_text(size=12),
                   axis.title.y = element_text(size=15)) + 
             ylab("Orbital time [min]")
+    })
+    output$launchSite <- renderLeaflet({
+        map <- satcat %>% filter(X4 == input$name) %>% left_join(.,launch_locations,by="X7")
+        
+        leaflet(data=map) %>%
+            addTiles() %>%
+            addMarkers(lng=~as.numeric(Longitude), lat=~as.numeric(Latitude), popup=~Location)
     })
 }
 

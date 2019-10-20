@@ -8,3 +8,4 @@ dependencies:
   - r-shiny
   - r-lubridate
   - r-devtools
+  - r-leaflet

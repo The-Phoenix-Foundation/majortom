@@ -1,0 +1,39 @@
+LOCATION,NAME,LAT,LON
+AFETR,"Air Force Eastern Test Range, Florida, USA",28.012440,-82.425160
+AFWTR,"Air Force Western Test Range, California, USA",33.650940,-112.004920
+CAS ,Canaries Airspace,28.124830,-15.430020
+DLS ,"Dombarovskiy Launch Site, Russia",50.755290,59.529920
+ERAS ,Eastern Range Airspace,28.388230,-80.605880
+FRGUI,"Europe's Spaceport, Kourou, French Guiana",5.160330,-52.641550
+HGSTR,"Hammaguira Space Track Range, Algeria",31.021290,-2.719020
+JSC ,"Jiuquan Space Center, PRC",39.742062,98.510002
+KODAK,"Kodiak Launch Complex, Alaska, USA",57.789890,-152.407030
+KSCUT,"Uchinoura Space Center
+(Fomerly Kagoshima Space Center—University of Tokyo, Japan)",31.254112,131.078796
+KWAJ ,US Army Kwajalein Atoll (USAKA),13.561130,144.909149
+KYMSC,"Kapustin Yar Missile and Space Complex, Russia",44.900970,39.924010
+NSC,"Naro Space Complex, Republic of Korea",34.441688,127.534063
+PLMSC,"Plesetsk Missile and Space Complex, Russia",,
+RLLB ,Rocket Lab Launch Base,-39.036062,177.441062
+SEAL ,Sea Launch Platform (mobile),28.388230,-80.605880
+SEMLS,"Semnan Satellite Launch Site, Iran",28.388230,-80.605880
+SNMLP,"San Marco Launch Platform, Indian Ocean (Kenya)",28.388230,-80.605880
+SRILR,"Satish Dhawan Space Centre, India
+(Formerly Sriharikota Launching Range)",28.388230,-80.605880
+SUBL,"Submarine Launch Platform (mobile), Russia",28.388230,-80.605880
+SVOBO,"Svobodnyy Launch Complex, Russia",28.388230,-80.605880
+TAISC,"Taiyuan Space Center, PRC",28.388230,-80.605880
+TANSC,"Tanegashima Space Center, Japan",28.388230,-80.605880
+TYMSC,"Tyuratam Missile and Space Center, Kazakhstan
+(Also known as Baikonur Cosmodrome)",28.388230,-80.605880
+UNK,Unknown,28.388230,-80.605880
+VOSTO,"Vostochny Cosmodrome, Russia",28.388230,-80.605880
+WLPIS,"Wallops Island, Virginia, USA",28.388230,-80.605880
+WOMRA,"Woomera, Australia",28.388230,-80.605880
+WRAS,Western Range Airspace,28.388230,-80.605880
+ WSC,"Wenchang Satellite Launch Center, PRC",28.388230,-80.605880
+XICLF,"Xichang Launch Facility, PRC",28.388230,-80.605880
+YAVNE,"Yavne Launch Facility, Israel",28.388230,-80.605880
+YUN,"Yunsong Launch Site
+(Sohae Satellite Launching Station),
+Democratic People's Republic of Korea",28.388230,-80.605880

@@ -123,14 +123,25 @@ satcat$X4[satcat$X2==44633]
 satcat_meta_active %>% mutate(soi=case_when(X4 == "STARLETTE" ~ TRUE,
                                             TRUE ~ FALSE)) %>% 
                        mutate(CAT=1) %>% 
+                       mutate(radians=X10*pi/180) %>% 
             ggplot() + 
-  geom_point(aes(x=as.factor(CAT),y=X9),colour="black",alpha=0.5) + 
-  geom_point(data = {. %>% filter(X4=="STARLETTE")}, aes(x=as.factor(CAT),y=X9),colour="red", size=5) +
-  geom_label(data = {. %>% filter(X4=="STARLETTE")}, aes(x=as.factor(CAT),y=X9,label=X4),nudge_x=0.12) +
+  geom_point(aes(x=as.factor(CAT),y=degree(X10)),colour="black",alpha=0.5) + 
+  geom_point(data = {. %>% filter(X4=="STARLETTE")}, aes(x=as.factor(CAT),y=X10),colour="red", size=5) +
+  geom_label(data = {. %>% filter(X4=="STARLETTE")}, aes(x=as.factor(CAT),y=X10,label=X4),nudge_x=0.12) +
   theme_minimal() + 
   theme(legend.position = "None",
         axis.title.x = element_blank(),
         axis.text.x = element_blank()) + 
-  ylab("Orbital time [min]")
+  ylab("Orbital time [min]") + coord_polar()
+```
+
+```{r}
+loc <- read_csv("majortom/launch_sites.csv", col_names = c("X7","Location","Latitude","Longitude"))
+
+map <- satcat_meta_active %>% filter(X4 == "STARLETTE") %>% left_join(.,loc,by="X7")
+
+leaflet(data=map) %>%
+  addTiles() %>% # Add default OpenStreetMap map tiles
+  addMarkers(lng=~as.numeric(Longitude), lat=~as.numeric(Latitude), popup=~Location)
 ```
 
