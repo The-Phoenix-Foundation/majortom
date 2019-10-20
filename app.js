@@ -150,6 +150,10 @@ function showLocation() {
                 dish.scale = 500;
                 //dish.position = position;
                 dish.altitudeMode = WorldWind.CLAMP_TO_GROUND;
+                dish.xRotation = -35.0;
+                dish.yRotation = -35.0;
+                dish.zRotation = -35.0;
+                dish.zTranslation = 30.0;
                 placemarkLayer.addRenderable(dish);
             });
 
