@@ -13,7 +13,7 @@ SATELLITES = os.path.join(os.path.dirname(__file__), '../data/active.txt')
 
 import json
 
-from flask import Blueprint, render_template_string, jsonify
+from flask import Blueprint, render_template_string, jsonify, make_response
 
 blueprint = Blueprint('main', __name__, static_folder='../static')
 
@@ -68,7 +68,10 @@ def sat_info(sat_id):
 
     url = "https://celestrak.com/satcat/%d/%s.php#%s" % (year, full_sat_id, launch_piece)
     resp = requests.get(url)
-    return resp.content
+
+    response = make_response(resp.content, 200)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 @blueprint.route('/satellite_position.json')
