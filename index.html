@@ -81,7 +81,12 @@
                       Your browser does not support HTML5 Canvas.
                     </canvas>
                   </div>
-                  <div role="tabpanel" class="tab-pane" id="inventory">...</div>
+                  <div role="tabpanel" class="tab-pane" id="inventory">
+                    <span id="collectedSatelliteYES" style="display: none;">AWESOME SATELLITE ALREADY COLLECTED!</span>
+                    <span id="collectedSatelliteNO">
+                      <button id="collectButton" type="button" class="btn btn-default">COLLECT</button>
+                    </span>
+                  </div>
                 </div>
 
               </div>
@@ -144,6 +149,12 @@
       $('#closeBtn').on('click', function(e){
           $('#navbar a:first').tab('show');
       });
+
+      $("#collectButton").click(() => {
+        var designator = $("#collectButton").data("designator");
+        addSatellite(designator);
+      });
+
     </script>
   </body>
 </html>

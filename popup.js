@@ -3,10 +3,21 @@ var modelLayer = new WorldWind.RenderableLayer("satellites");
 
 //modelwwd.goTo(userLocation);
 var selectedSatellite;
+var collectedSatellites = loadCollectedSats();
 
 function showPopup(userObject) {
     $('#satelliteName').text(userObject.displayName);
     $("#info").load("https://phoenix.outdated.at/majortom/v1.0/info/" + userObject.displayName);
+
+    $("#collectButton").data("designator", userObject.displayName);
+    if (isCollectedSatellite(userObject.displayName)) {
+        $("#collectedSatelliteNO").hide();
+        $("#collectedSatelliteYES").show();
+    } else {
+        $("#collectedSatelliteNO").show();
+        $("#collectedSatelliteYES").hide();
+    }
+
     $('#satelliteModal').modal();
     console.log(userObject);
     selectedSatellite = satelliteObjects[userObject.displayName]['data']
@@ -42,5 +53,48 @@ function renderSatelliteModel() {
     scene.position = position;
     scene.altitudeMode = WorldWind.ABSOLUTE;
     modelLayer.addRenderable(scene);
+}
+
+function loadCollectedSats() {
+    var sats = getCookie('majortom');
+    if (sats === null) {
+        return [];
+    } else {
+        return JSON.parse(sats);
+    }
+}
+
+function addSatellite(designator) {
+    collectedSatellites.push(designator);
+    setCookie('majortom', JSON.stringify(collectedSatellites));
+}
+
+function isCollectedSatellite(designator) {
+    return collectedSatellites.includes(designator);
+}
+
+// copied from
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+function eraseCookie(name) {
+    document.cookie = name+'=; Max-Age=-99999999;';
 }
 
