@@ -6,7 +6,7 @@ library(lubridate)
 library(glue)
 library(ggradar)
 
-#csv_path <- Sys.getenv(c("SATCAT_CSV"))
+csv_path <- Sys.getenv(c("SATCAT_CSV"))
 cat('using metadata path', csv_path)
 
 satcat <- read_csv(csv_path)
@@ -19,7 +19,6 @@ ui <- fluidPage(
         sidebarPanel(
     uiOutput("selector"),
         ),
-##
         mainPanel(
            plotOutput("classRadar"),
            plotOutput("launchDate")
