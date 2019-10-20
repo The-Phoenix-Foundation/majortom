@@ -14,7 +14,7 @@ ENV PATH /opt/conda/envs/majortom/bin:$PATH
 RUN Rscript /dependencies.R
 
 ADD shiny /shiny
-ENV SATCAT_CSV /shiny/majortom/satcat_meta.csv
+ENV SATCAT_CSV /shiny/majortom/satcat_meta_active.csv
 
 WORKDIR /shiny/majortom
 CMD Rscript app.R
