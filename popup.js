@@ -1,5 +1,6 @@
 var modelwwd;
 var modelLayer = new WorldWind.RenderableLayer("satellites");
+
 //modelwwd.goTo(userLocation);
 var selectedSatellite;
 
@@ -10,7 +11,8 @@ function showPopup(userObject) {
     console.log(userObject);
     selectedSatellite = satelliteObjects[userObject.displayName]['data']
     updateSatelliteStats(selectedSatellite);
-    renderSatelliteModel();
+    $('#modelCanvas').height(480).width(640);
+    renderSatelliteModel()
 
 }
 
@@ -28,7 +30,9 @@ function renderSatelliteModel() {
     modelLayer.removeAllRenderables();
     var currentSatelitePosition = currentSatellitePos[satellite.id];
     var position = new WorldWind.Position(currentSatelitePosition.latitude, currentSatelitePosition.longitude, currentSatelitePosition.altitude);
-    modelwwd.goto(position)
+    var viewPosition = new WorldWind.Position(currentSatelitePosition.latitude, currentSatelitePosition.longitude, 
+                                    currentSatelitePosition.altitude + 251975);
+    modelwwd.goTo(viewPosition)
     var colladaLoader = new WorldWind.ColladaLoader(position);
     var category = satellite.category;
     colladaLoader.init({dirPath: './models/'+category+'/'});
