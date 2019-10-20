@@ -131,7 +131,10 @@ function showLocation() {
         navigator.geolocation.getCurrentPosition(function(location) {
             userLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 0); 
             var circle_attribs = new WorldWind.ShapeAttributes();
-            circle_attribs.drawInterior = false;
+            //circle_attribs.drawInterior = false;
+            circle_attribs.interiorColor.alpha = 0.15;
+            circle_attribs.interiorColor.blue = 0 ;
+            circle_attribs.outlineWidth = 3;
             surfCirle = new WorldWind.SurfaceCircle(userLocation, satelliteFilterDistanceKm*1000, circle_attribs);
             var pinLibrary = WorldWind.configuration.baseUrl + "images/pushpins/";
             wwd.goTo(userLocation);
