@@ -15,14 +15,17 @@ ui <- fluidPage(
     verticalLayout(
     tabsetPanel(
         tabPanel("Satellite",
-            uiOutput("selector")
+            uiOutput("selector", height=640, width=480)
             ),
         tabPanel("Function",
-            plotOutput("classRadar")
+            plotOutput("classRadar", height=640, width=480)
             ),
         tabPanel("Launch Date",
-           plotOutput("launchDate")
-            )
+           plotOutput("launchDate", height=640, width=480)
+           ),
+        tabPanel("Information",
+           tableOutput("infotable")
+           )
         )
     )
 )
@@ -35,7 +38,6 @@ server <- function(input, output, session) {
         } else {
             selection <- 40697 # SENTINEL-2A
         }
-        print(catalog_number)
         selectInput("name", "Name", choices = satcat$X4, selected = satcat$X4[satcat$X2==selection])
     })
     output$classRadar <- renderPlot({
@@ -46,7 +48,7 @@ server <- function(input, output, session) {
                 grid.line.width=0,
                 group.point.size = 0,
                 gridline.mid.colour = "black",
-                axis.line.colour = "black")
+                axis.line.colour = "black") + theme(legend.position = "bottom")
     })
     output$launchDate <- renderPlot({
         
@@ -57,8 +59,8 @@ server <- function(input, output, session) {
         time %>% ggplot(.,aes(x=year(X6),y=0, colour=X4)) +
             theme_classic() +
             geom_hline(yintercept=0, color = "black", size=0.3) +
-            geom_segment(aes(y=year(X6),yend=0,xend=year(X6)), color='black', size=0.2) +
-            geom_label(aes(y=year(X6),label=date(X6)),color="black") +
+            geom_segment(aes(y=1,yend=0,xend=year(X6)), color='black', size=1) +
+            geom_label(aes(y=1,label=date(X6)),color="black") +
             xlim(1950,year(now())) +
             geom_point(aes(y=0), size=3) +
             theme(axis.line.y=element_blank(),
@@ -68,20 +70,23 @@ server <- function(input, output, session) {
                   axis.ticks.y=element_blank(),
                   axis.ticks.x =element_blank(),
                   axis.line.x =element_blank(),
+                  axis.text.x = element_text(size=15),
+                  legend.text = element_text(size=15),
                   legend.position = "bottom",
                   legend.title = element_blank()
-            ) +
-            ggtitle("Launch Date")
+            )
     })
-    output$img <- renderImage({
-    })
-    output$picture <- renderText({
-        data <- satcat %>% filter(X4 == input$name)
-        src = "https://nasa3d.arc.nasa.gov/shared_assets/models/acrimsat/acrimsat-428-321.png"
-        c('<img src="',src,'">')
-        print(glue("Origin: {data$X5}"))
-        print(glue("Launch Date: {data$X6}"))
-    })    
+    output$infotable <- renderTable({
+        info <- satcat %>%
+            filter(X4 == input$name) %>% 
+            select(Owner=5,
+                   `International Identifier`=1,
+                   `NORAD Catalog Number`=2,
+                   Name=4,
+                   `Orbital period [min]`=9,
+                   `Inclination [deg]`=10) %>% 
+            gather()
+    }, colnames=FALSE)    
 }
 
 # Run the application 
