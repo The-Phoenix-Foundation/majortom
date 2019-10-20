@@ -6,7 +6,7 @@
 
 **Project page: [The Phoenix Foundation](https://2019.spaceappschallenge.org/challenges/living-our-world/set-your-sights-high/teams/the-phoenix-foundation/project)**
 
-**Project pitch: [pdf of our talk](https://github.com/The-Phoenix-Foundation/majortom/blob/master/tpf.pdf)
+**Project pitch: [pdf of our talk](https://github.com/The-Phoenix-Foundation/majortom/blob/master/tpf.pdf)**
 
 ### Additional features we envision in the future:
 - Quizzes that test your obtained satellite knowledge and give different rewards
