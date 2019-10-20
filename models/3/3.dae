@@ -22,16 +22,16 @@
   </library_lights>
   <library_images>
     <image id="m0aluminum-diffuse-image">
-      <init_from>//texture\foil_silver_ramp.png</init_from>
+      <init_from>texture/foil_silver_ramp.png</init_from>
     </image>
     <image id="m1dish_AO_01-diffuse-image">
-      <init_from>//texture\dish_AO_01.png</init_from>
+      <init_from>texture/dish_AO_01.png</init_from>
     </image>
     <image id="m2shiny_panel-diffuse-image">
-      <init_from>//texture\tex_01.psd</init_from>
+      <init_from>texture/tex_01.png</init_from>
     </image>
     <image id="m3tex_01-diffuse-image">
-      <init_from>//texture\tex_01.psd</init_from>
+      <init_from>texture/tex_01.png</init_from>
     </image>
   </library_images>
   <library_effects>
