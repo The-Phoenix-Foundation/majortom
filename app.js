@@ -132,7 +132,7 @@ function showLocation() {
             userLocation = new WorldWind.Position(location.coords.latitude, location.coords.longitude, 0); 
             var circle_attribs = new WorldWind.ShapeAttributes();
             circle_attribs.drawInterior = false;
-            surfCirle = new WorldWind.SurfaceCircle(userLocation, 100000, circle_attribs);
+            surfCirle = new WorldWind.SurfaceCircle(userLocation, satelliteFilterDistanceKm*1000, circle_attribs);
             var pinLibrary = WorldWind.configuration.baseUrl + "images/pushpins/";
             wwd.goTo(userLocation);
             var placemarkAttributes = new WorldWind.PlacemarkAttributes(null);
