@@ -46,7 +46,9 @@ satcat_meta <- read_table("majortom/satcat.txt", col_names = F) %>%
 meta <- read_tsv("majortom/meta/meta.tsv", col_names = F) %>% rename(ID=X1) %>% 
   pivot_wider(names_from = X3, values_from = X2)
 
+satcat_meta_active <- satcat_meta %>% filter(X2 %in% active$ID)
 
+#write_csv(satcat_meta_active,"majortom/satcat_meta_active.csv")
 
 ```
 
@@ -97,7 +99,7 @@ time %>% ggplot(.,aes(x=year(X6),y=0, colour=X4)) +#, col=status, label=mileston
          geom_hline(yintercept=0, color = "black", size=0.3) +
          geom_segment(aes(y=year(X6),yend=0,xend=year(X6)), color='black', size=0.2) +
          geom_label(aes(y=year(X6),label=date(X6)),color="black") +
-         xlim(1970,year(now())) +
+         xlim(1950,year(now())) +
          geom_point(aes(y=0), size=3) +
          theme(axis.line.y=element_blank(),
                  axis.text.y=element_blank(),

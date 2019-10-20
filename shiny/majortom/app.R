@@ -2,11 +2,12 @@
 
 library(shiny)
 library(tidyverse)
+library(lubridate)
 library(glue)
 library(ggradar)
 
 csv_path <- Sys.getenv(c("SATCAT_CSV"))
-cat('using metdata path', csv_path)
+cat('using metadata path', csv_path)
 
 satcat <- read_csv(csv_path)
 
@@ -14,12 +15,11 @@ ui <- fluidPage(
 
     # Application title
     titlePanel("Satellites"),
-
     sidebarLayout(
         sidebarPanel(
-            selectInput("name", "Choose satellite", choices = satcat$X4, selected = "HST")
+    uiOutput("selector"),
         ),
-
+##
         mainPanel(
            plotOutput("classRadar"),
            plotOutput("launchDate")
@@ -28,12 +28,19 @@ ui <- fluidPage(
     )
 )
 
-server <- function(input, output) {
-
+server <- function(input, output, session) {
+    output$selector <- renderUI({
+        query <- parseQueryString(session$clientData$url_search)
+        if ( length(query) > 0) {
+            selection <- query
+        } else {
+            selection <- "SENTINEL-2A"
+        }
+        print(query)
+        selectInput("name", "Choose satellite", choices = satcat$X4, selected = selection)
+    })
     output$classRadar <- renderPlot({
-        
         curr_sat <- satcat %>% filter(X4 == input$name) %>% select(4,15:19)
-        
         ggradar(curr_sat,
                 axis.labels = c("Weather & Earth","Scientific","Communications","Navigation","Misc"),
                 grid.label.size=0,
@@ -44,7 +51,7 @@ server <- function(input, output) {
     })
     output$launchDate <- renderPlot({
         
-        time <- satcat_meta %>%
+        time <- satcat %>%
             filter(X4 == input$name) %>% 
             select(4,6,8)
         
@@ -53,7 +60,7 @@ server <- function(input, output) {
             geom_hline(yintercept=0, color = "black", size=0.3) +
             geom_segment(aes(y=year(X6),yend=0,xend=year(X6)), color='black', size=0.2) +
             geom_label(aes(y=year(X6),label=date(X6)),color="black") +
-            xlim(1970,year(now())) +
+            xlim(1950,year(now())) +
             geom_point(aes(y=0), size=3) +
             theme(axis.line.y=element_blank(),
                   axis.text.y=element_blank(),
