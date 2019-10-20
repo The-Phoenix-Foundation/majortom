@@ -25,7 +25,6 @@ test <- nasadata::earth_event()
 ```
 
 ```{r}
-
 satcat <- read_table("majortom/satcat.txt", col_names = F)# %>%
 
 
@@ -47,9 +46,11 @@ meta <- read_tsv("majortom/meta/meta.tsv", col_names = F) %>% rename(ID=X1) %>%
   pivot_wider(names_from = X3, values_from = X2)
 
 satcat_meta_active <- satcat_meta %>% filter(X2 %in% active$ID)
+```
 
+
+```{r}
 #write_csv(satcat_meta_active,"majortom/satcat_meta_active.csv")
-
 ```
 
 
@@ -112,5 +113,9 @@ time %>% ggplot(.,aes(x=year(X6),y=0, colour=X4)) +#, col=status, label=mileston
                  legend.title = element_blank()
                 ) +
           ggtitle("Launch Date")
+```
+
+```{r}
+satcat$X4[satcat$X2==44633]
 ```
 

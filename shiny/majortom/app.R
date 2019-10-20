@@ -6,7 +6,7 @@ library(lubridate)
 library(glue)
 library(ggradar)
 
-csv_path <- Sys.getenv(c("SATCAT_CSV"))
+#csv_path <- Sys.getenv(c("SATCAT_CSV"))
 cat('using metadata path', csv_path)
 
 satcat <- read_csv(csv_path)
@@ -30,14 +30,14 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
     output$selector <- renderUI({
-        query <- parseQueryString(session$clientData$url_search)
-        if ( length(query) > 0) {
-            selection <- query
+        catalog_number <- parseQueryString(session$clientData$url_search)
+        if ( length(catalog_number) > 0) {
+            selection <- catalog_number
         } else {
-            selection <- "SENTINEL-2A"
+            selection <- 40697 # SENTINEL-2A
         }
-        print(query)
-        selectInput("name", "Choose satellite", choices = satcat$X4, selected = selection)
+        print(catalog_number)
+        selectInput("name", "Choose satellite", choices = satcat$X4, selected = satcat$X4[satcat$X2==selection])
     })
     output$classRadar <- renderPlot({
         curr_sat <- satcat %>% filter(X4 == input$name) %>% select(4,15:19)
