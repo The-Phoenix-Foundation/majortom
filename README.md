@@ -8,7 +8,7 @@
 
 **Project pitch: [our talk](https://github.com/The-Phoenix-Foundation/majortom/blob/master/tpf.pdf)**
 
-![app_img](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/mockup_app.png)
+![app_img](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/app.gif)
 
 ### Additional features we envision in the future:
 - Quizzes that test your obtained satellite knowledge and give different rewards
