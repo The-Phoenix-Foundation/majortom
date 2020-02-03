@@ -27,14 +27,20 @@ function distance_geographic(lat1, lon1, lat2, lon2) {
 }
 
     function satellite_in_distance(satellite, location, distance) {
+		try {
 
-        sat_long = satellite.longitude;
-        sat_lat = satellite.latitude;
+			sat_long = satellite.longitude;
+			sat_lat = satellite.latitude;
 
-        loc_long = location.longitude;
-        loc_lat = location.latitude;
-        
-        distance_calc = distance_geographic(sat_lat, sat_long, loc_lat, loc_long);
+			loc_long = location.longitude;
+			loc_lat = location.latitude;
+			
+			distance_calc = distance_geographic(sat_lat, sat_long, loc_lat, loc_long);
 
-        return (Math.round(distance_calc) <= Math.round(distance));
+			return (Math.round(distance_calc) <= Math.round(distance));
+		}
+		catch(err) {
+			console.log(err);
+			return false;
+		}
     }
