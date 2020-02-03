@@ -19,6 +19,9 @@ function loadSatellites() {
         return response.json();
       }).then(function(json) {
         satellites = json;
+        //satellite with index 781 has malformated two line format. 
+        //this is a quick and dirty fix to skipp it
+        satellites.splice(718, 1); //remove satelite 781
         console.log('parsed json of ', satellites.length, ' objects.')
         var sampleTime = new Date();
         for (var s = 0; s < satellites.length; s++) {
