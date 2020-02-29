@@ -15,7 +15,7 @@ function renderSatellite(satellite) {
     var position = new WorldWind.Position(currentSatelitePosition.latitude, currentSatelitePosition.longitude, currentSatelitePosition.altitude);
     var colladaLoader = new WorldWind.ColladaLoader(position);
     var category = satellite.category;
-    colladaLoader.init({dirPath: './models/'+category+'/'});
+    colladaLoader.init({dirPath: './resources/models/'+category+'/'});
     var scene = colladaLoader.parse(satelliteModelMap[category]);
     scene.displayName = satellite.id;
     scene.scale = 10000;
@@ -74,7 +74,7 @@ function loadSatelliteModels() {
     var allPromises = []
     for (var i=0;i < satelliteModels.length; i++) {
         let model = satelliteModels[i]; 
-        allPromises.push(fetch('/models/'+ model+'/'+model+'.dae')
+        allPromises.push(fetch('/resources/models/'+ model+'/'+model+'.dae')
           .then(function(response) {
             return response.text()
           }).then(function(body) {
@@ -143,7 +143,7 @@ function showLocation() {
             wwd.goTo(userLocation);
             
             var colladaLoader = new WorldWind.ColladaLoader(userLocation);
-            colladaLoader.init({dirPath: './'});
+            colladaLoader.init({dirPath: './resources/models/dish/'});
             var placemarkmodel = colladaLoader.load('dish.dae', function(dish) {
                 if (!dish)
                   return;
