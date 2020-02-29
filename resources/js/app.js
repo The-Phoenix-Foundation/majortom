@@ -1,12 +1,11 @@
-function jsonCopy(src) {
-  return JSON.parse(JSON.stringify(src));
-}
-var satelliteObjects = {}
+/** MajorTom app.js
+ * =================
+ *
+ */
+var satelliteObjects = {};
 var satellites = [];
 var filteredSatellites = [];
-var visibleSatellites = new Set([]);
 var userLocation = {latitude: 0, longitude:0};
-var satelliteOrbitsDrawn = false;
 var satelliteFilterDistanceKm = 1000;
 
 
@@ -59,7 +58,7 @@ function renderSatellites()  {
         var colorIdx = i % colors.length;
         var color = colors[colorIdx];
         var satellite = filteredSatellites[i];
-        if (!satellite.rendered || false ) {
+        if (!satellite.rendered) {
             renderSatellite(satellite);
             renderSatelliteOrbits(satellite, color);
             satellite.rendered = true;
@@ -71,7 +70,7 @@ function renderSatellites()  {
 
 function loadSatelliteModels() {
     var satelliteModels = ['0', '1', '2', '3'];
-    var allPromises = []
+    var allPromises = [];
     for (var i=0;i < satelliteModels.length; i++) {
         let model = satelliteModels[i]; 
         allPromises.push(fetch('/resources/models/'+ model+'/'+model+'.dae')
@@ -107,7 +106,7 @@ function filterSatellites() {
     });
     newFilteredIds = new Set(newFilteredSatellites.map(function(x) {
         return x.id;
-    }))
+    }));
     var difference = new Set([...filteredSatellites.map(function(x) {
         return x.id;
     })].filter(x => !newFilteredIds.has(x)));
@@ -144,7 +143,7 @@ function showLocation() {
             
             var colladaLoader = new WorldWind.ColladaLoader(userLocation);
             colladaLoader.init({dirPath: './resources/models/dish/'});
-            var placemarkmodel = colladaLoader.load('dish.dae', function(dish) {
+            colladaLoader.load('dish.dae', function(dish) {
                 if (!dish)
                   return;
                 dish.scale = 500;
@@ -186,7 +185,6 @@ function showLocation() {
 
 // Tell WorldWind to log only warnings and errors.
 WorldWind.Logger.setLoggingLevel(WorldWind.Logger.LEVEL_WARNING);
-var satellites;
 var satelliteModelMap = {};
 loadSatelliteModels();
 // Create the WorldWindow.
@@ -227,17 +225,19 @@ var handleClick = function (recognizer) {
     // relative to the upper left corner of the canvas rather than the upper left corner of the page.
     var pickList = wwd.pick(wwd.canvasCoordinates(x, y));
     // If only one thing is picked and it is the terrain, use a go-to animator to go to the picked location.
-    if (pickList.objects.length == 2 && pickList.objects[0].parentLayer.displayName == 'satellites') {
-        var position = pickList.objects[0].position;
+    if (pickList.objects.length === 2 && pickList.objects[0].parentLayer.displayName === 'satellites') {
+        // var position = pickList.objects[0].position;
         var userObject = pickList.objects[0].userObject;
         showPopup(userObject);
     }
 };
 
 // Listen for mouse clicks.
+// noinspection JSUnusedGlobalSymbols
 var clickRecognizer = new WorldWind.ClickRecognizer(wwd, handleClick);
 
 // Listen for taps on mobile devices.
+// noinspection JSUnusedGlobalSymbols
 var tapRecognizer = new WorldWind.TapRecognizer(wwd, handleClick);
 
 
@@ -263,7 +263,7 @@ function runAnimation() {
     starFieldLayer.time = date;
     atmosphereLayer.time = date;
     updateSatellitePositions();
-    if (++last % 300 == 0) update();
+    if (++last % 300 === 0) update();
     wwd.redraw(); // Update the WorldWindow scene.
 
     requestAnimationFrame(runAnimation);
