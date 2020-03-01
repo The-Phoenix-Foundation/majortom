@@ -8,9 +8,6 @@ var sampleTleLine1 = '1 25544U 98067A   19156.50900463  .00003075  00000-0  5944
 
 
 
-var satelliteOrbits = {};
-var currentSatellitePos = {};
-
 
 function loadSatellites() {
     var satellitesEndpoint = 'https://phoenix.outdated.at/majortom/v1.0/satellites';
@@ -19,7 +16,7 @@ function loadSatellites() {
         return response.json();
       }).then(function(json) {
         satellites = json;
-        //satellite with index 781 has malformated two line format. 
+        //satellite with index 781 has malformated two line format.
         //this is a quick and dirty fix to skipp it
         satellites.splice(718, 1); //remove satelite 781
         console.log('parsed json of ', satellites.length, ' objects.')
@@ -46,6 +43,33 @@ function positionToDegreesKm(pos) {
     pos['altitude'] = pos['height'] * 1000.0;
 
     return pos;
+}
+
+function satrec2currentGeodetic(satrec, sampleTime) {
+    //  Or you can use a JavaScript Date
+    var positionAndVelocity = satellite.propagate(satrec, sampleTime);
+
+    var gmst = satellite.gstime(sampleTime);
+    var positionEci = positionAndVelocity.position;
+
+    var geodetic = satellite.eciToGeodetic(positionEci, gmst);
+
+    return positionToDegreesKm(geodetic);
+}
+
+function satrec2orbit(satrec, sampleTime) {
+    // LEO satellites have an orbit of ca 127min
+    // we use this for orbit propagation calc
+    var totalOrbitTimeMilis = 60 * 60 * 1000;
+    var sampleCnt = 100;
+    var sampleInterval = totalOrbitTimeMilis / sampleCnt;
+    var orbitPosList = [];
+    for (var i = - sampleCnt/2; i < sampleCnt/2; i++) {
+        var sampleOffset = i * sampleInterval;
+        var newDate = new Date(sampleTime.getTime() + sampleOffset);
+        orbitPosList.push(satrec2currentGeodetic(satrec, newDate));
+    }
+    return orbitPosList;
 }
 
 

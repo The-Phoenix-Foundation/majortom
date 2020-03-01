@@ -1,6 +1,8 @@
 body,
 html {
   font-size: 18px;
+  background: #222222;
+  color: #eeeeee;
 }
 
 a {
@@ -63,7 +65,26 @@ section {
 /* Footer */
 
 footer {
-  background: black;
+  background: #222222;
   color: lightgray;
   padding: .6em;
+  height: 50px;
 }
+
+#canvasOneContainer {
+  background: black;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 102px);
+}
+
+#satelliteModal {
+  color: #333333;
+}
+
+#inventoryContainer li > span {
+  margin-left: 10px;
+}
+
+
