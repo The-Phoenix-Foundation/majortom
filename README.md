@@ -8,7 +8,7 @@
 
 **Project pitch: [our talk](https://github.com/The-Phoenix-Foundation/majortom/blob/master/tpf.pdf)**
 
-![app_img](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/app.gif)
+![app_img](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/screenshots/app.gif)
 
 ### Additional features we envision in the future:
 - Quizzes that test your obtained satellite knowledge and give different rewards
@@ -18,14 +18,14 @@
 
 ## Functionality overview
 Satellite trajectories are rendered color coded lines. 
-![img1](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite.jpg)
+![img1](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/screenshots/satellite.jpg)
 
 The satellites are rendered as 3D models that can be collected by clicking on them. 
-![img2](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite2.jpg)
+![img2](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/screenshots/satellite2.jpg)
 
 Clicking on the satellites will open an additional menu displaying additional data.
-![img4](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats.jpg)
-![img5](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/images/satellite_stats2.jpg)
+![img4](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/screenshots/satellite_stats.jpg)
+![img5](https://github.com/The-Phoenix-Foundation/majortom/blob/gh-pages/screenshots/satellite_stats2.jpg)
 
 ## Source code
 - [master](https://github.com/The-Phoenix-Foundation/majortom): contains backend
