@@ -122,15 +122,38 @@ class SatelliteRenderer {
         }
     }
 
+    _clone(obj) {
+        // remove overhead of model parsing on each satellite render
+        if (typeof obj === 'undefined') {
+            return undefined;
+        } else if (obj === null) {
+            return null;
+        } else if (typeof obj !== 'object') {
+            return obj;
+        } else if (Array.isArray(obj)) {
+            return [...obj];
+        }
+        let props = Object.getOwnPropertyDescriptors(obj);
+        let newObj = {};
+        for (let prop in props) {
+            if (props.hasOwnProperty(prop)) {
+                let propDescription = Object.assign({}, props[prop]);
+                propDescription.value = this._clone(propDescription.value);
+                newObj[prop] = propDescription;
+            }
+        }
+        return Object.create(
+            Object.getPrototypeOf(obj),
+            newObj
+        );
+    }
+
     _renderSatellite(satId, satPos, category) {
         let position = new WorldWind.Position(satPos.latitude, satPos.longitude, satPos.altitude);
-        let colladaLoader = new WorldWind.ColladaLoader(position);
-        colladaLoader.init({dirPath: './resources/models/' + category + '/'});
-
-        let scene = colladaLoader.parse(this._categoryModels.get(category));
+        let scene = this._clone(this._categoryModels.get(category));
         scene.displayName = satId;
         scene.satelliteCategory = category;
-        scene.scale = 10000;
+        scene.scale = 15000;
         scene.position = position;
         scene.altitudeMode = WorldWind.ABSOLUTE;
 
@@ -172,7 +195,10 @@ class SatelliteRenderer {
                     .then(function (response) {
                         return response.text();
                     }).then(function (body) {
-                        self._categoryModels.set(model, body);
+                        const loader = new WorldWind.ColladaLoader(new WorldWind.Position(0, 0, 0));
+                        loader.init({dirPath: '/resources/models/' + model + '/'});
+                        let sceneObject = loader.parse(body);
+                        self._categoryModels.set(model, sceneObject);
                     }).catch(function (ex) {
                         console.log('parsing failed', ex)
                     })
