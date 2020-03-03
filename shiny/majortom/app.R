@@ -37,13 +37,14 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
     output$selector <- renderUI({
-        catalog_number <- parseQueryString(session$clientData$url_search)
-        if ( length(catalog_number) > 0) {
-            selection <- catalog_number
+
+        query <- parseQueryString(session$clientData$url_search)
+        if ( length(query$designator) > 0) {
+            selection <- toupper(query$designator)
         } else {
-            selection <- 40697 # SENTINEL-2A
+            selection <- "2015-028A"  # SENTINEL-2A
         }
-        selectInput("name", "Name", choices = satcat$X4, selected = satcat$X4[satcat$X2==selection])
+        selectInput("name", "Name", choices = satcat$X4, selected = satcat$X4[satcat$X1==selection])
     })
     output$classRadar <- renderPlot({
         curr_sat <- satcat %>% filter(X4 == input$name) %>% select(4,15:19)
