@@ -73,9 +73,9 @@ class InfoPopUp {
         return majorTomRenderer.getCategory(shortDesignator);
     }
 
-    _getCategoryModel(category) {
+    _getCategorySceneObject(category) {
         // same workaround...
-        return majorTomRenderer._categoryModels.get(category)
+        return majorTomRenderer._clone(majorTomRenderer._categoryModels.get(category))
     }
 
     renderInventory() {
@@ -117,10 +117,8 @@ class InfoPopUp {
         let viewPos = new WorldWind.Position(satPos.latitude, satPos.longitude, satPos.altitude + 300000);
         modelwwd.goTo(viewPos);
 
-        let colladaLoader = new WorldWind.ColladaLoader(satPos);
         let category = this.getCategory(designator);
-        colladaLoader.init({dirPath: './resources/models/' + category + '/'});
-        let scene = colladaLoader.parse(this._getCategoryModel(category));
+        let scene = this._getCategorySceneObject(category);
         scene.displayName = designator;
         scene.scale = 10000;
         scene.position = satPos;
