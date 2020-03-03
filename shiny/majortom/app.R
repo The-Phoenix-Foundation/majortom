@@ -5,7 +5,7 @@ library(glue)
 library(ggradar)
 library(leaflet)
 
-csv_path <- Sys.getenv(c("SATCAT_META"))
+csv_path <- Sys.getenv(c("SATCAT_META"), ".")
 cat('using metadata path', csv_path)
 
 satcat <- read_csv(file.path(csv_path, "satcat_meta_active.csv"))
