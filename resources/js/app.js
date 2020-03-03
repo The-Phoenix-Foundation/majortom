@@ -263,20 +263,21 @@ function setupLocation(wwd, circleLayer, placemarkLayer, location, distanceKM) {
     const surfCirle = new WorldWind.SurfaceCircle(userLocation, distanceKM * 1000, circle_attribs);
 
     // var pinLibrary = WorldWind.configuration.baseUrl + "images/pushpins/";
-    wwd.goTo(userLocation);
-
-    const colladaLoader = new WorldWind.ColladaLoader(userLocation);
-    colladaLoader.init({dirPath: './resources/models/dish/'});
-    colladaLoader.load('dish.dae', function (dish) {
-        if (!dish)
-            return;
-        dish.scale = 500;
-        dish.altitudeMode = WorldWind.CLAMP_TO_GROUND;
-        dish.xRotation = -35.0;
-        dish.yRotation = -35.0;
-        dish.zRotation = -35.0;
-        dish.zTranslation = 30.0;
-        placemarkLayer.addRenderable(dish);
+    wwd.goTo(userLocation, function () {
+        // load after goto
+        const colladaLoader = new WorldWind.ColladaLoader(userLocation);
+        colladaLoader.init({dirPath: './resources/models/dish/'});
+        colladaLoader.load('dish.dae', function (dish) {
+            if (!dish)
+                return;
+            dish.scale = 1000;
+            dish.altitudeMode = WorldWind.CLAMP_TO_GROUND;
+            dish.xRotation = -35.0;
+            dish.yRotation = -35.0;
+            dish.zRotation = -35.0;
+            dish.zTranslation = 30.0;
+            placemarkLayer.addRenderable(dish);
+        });
     });
 
     const placemarkAttributes = new WorldWind.PlacemarkAttributes(null);
