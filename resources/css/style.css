@@ -79,6 +79,7 @@ footer {
   height: calc(100vh - 102px);
 }
 
+#aboutModal,
 #satelliteModal {
   color: #333333;
 }
