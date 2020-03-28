@@ -52,10 +52,14 @@ function mainLoop() {
         const filteredSatrecs = new Map();
         for (let [satId, satrec] of satrecs.entries()) {
             let sampleTime = new Date();
-            let pos = satrec2currentGeodetic(satrec, sampleTime);
-            const visible = satellite_in_distance(pos, userLocation, userDistance);
-            if (visible) {
-                filteredSatrecs.set(satId, satrec);
+            try {
+                let pos = satrec2currentGeodetic(satrec, sampleTime);
+                const visible = satellite_in_distance(pos, userLocation, userDistance);
+                if (visible) {
+                    filteredSatrecs.set(satId, satrec);
+                }
+            } catch (err) {
+                console.log('error parsing satrecs', err);
             }
         }
         postMessage(['filtered', filteredSatrecs]);
