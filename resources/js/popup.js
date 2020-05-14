@@ -46,7 +46,7 @@ class InfoPopUp {
     }
 
     shinyapp_url(designator) {
-        return 'https://majortom-backend.shinyapps.io/majortom/?designator=' + designator;
+        return 'https://poehlmann.shinyapps.io/majortom/?designator=' + designator;
     }
 
     _parseUserObject(userObject) {
